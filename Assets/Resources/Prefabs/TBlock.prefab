@@ -52,7 +52,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4552923340106224}
   - component: {fileID: 114615967513085366}
-  - component: {fileID: 114202909518628228}
   m_Layer: 0
   m_Name: TBlock
   m_TagString: Untagged
@@ -161,17 +160,6 @@ Transform:
   m_Father: {fileID: 4552923340106224}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114202909518628228
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1553415085629332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6154fd0d175c2f4bbc63cd79885fa88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114615967513085366
 MonoBehaviour:
   m_ObjectHideFlags: 1

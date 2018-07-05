@@ -68,7 +68,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4445009197787552}
   - component: {fileID: 114067788971327244}
-  - component: {fileID: 114072222969970194}
   m_Layer: 0
   m_Name: LBlock
   m_TagString: Untagged
@@ -175,17 +174,6 @@ MonoBehaviour:
   fallSpeed: 1
   allowRoatation: 1
   limitRoatiotion: 0
---- !u!114 &114072222969970194
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1972693242646676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6154fd0d175c2f4bbc63cd79885fa88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &212007139263459320
 SpriteRenderer:
   m_ObjectHideFlags: 1

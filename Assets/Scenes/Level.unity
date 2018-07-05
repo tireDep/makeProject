@@ -215,48 +215,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a2fff0fdeca89af49a38eea5080fb67f, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &1214137359
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 2.8952293
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 12.129701
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -0.15323369
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4445009197787552, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 0823f6327ba3b394e9b022aed345f3be, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1931978394
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,16 +256,16 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.3764685, g: 0.5249149, b: 0.5660378, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.7
     y: 0
     width: 1
-    height: 1
+    height: 3
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 1
   orthographic: 1
   orthographic size: 11
   m_Depth: 0
@@ -332,7 +290,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1931978394}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.4, y: 9.84, z: -0.52443266}
+  m_LocalPosition: {x: 4.4, y: 9, z: -0.52443266}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

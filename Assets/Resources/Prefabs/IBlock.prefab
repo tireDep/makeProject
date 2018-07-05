@@ -36,7 +36,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4088592090791508}
   - component: {fileID: 114594598297873456}
-  - component: {fileID: 114695171062500420}
   m_Layer: 0
   m_Name: IBlock
   m_TagString: Untagged
@@ -175,17 +174,6 @@ MonoBehaviour:
   fallSpeed: 1
   allowRoatation: 1
   limitRoatiotion: 1
---- !u!114 &114695171062500420
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1383494969834878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6154fd0d175c2f4bbc63cd79885fa88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &212029696897267052
 SpriteRenderer:
   m_ObjectHideFlags: 1
