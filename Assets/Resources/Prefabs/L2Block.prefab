@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4763767627036186}
   - component: {fileID: 114381935150677524}
-  - component: {fileID: 114655832363320700}
+  - component: {fileID: 114990232133825018}
   m_Layer: 0
   m_Name: L2Block
   m_TagString: Untagged
@@ -173,7 +173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 1
---- !u!114 &114655832363320700
+  allowRoatation: 1
+  limitRoatiotion: 0
+--- !u!114 &114990232133825018
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

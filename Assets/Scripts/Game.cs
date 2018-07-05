@@ -10,13 +10,18 @@ public class Game : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        SpawnNextTetromino();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    public void SpawnNextTetromino()    // 다음 블록 생성
+    {
+        GameObject nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
+    }
 
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무
     {
@@ -28,5 +33,37 @@ public class Game : MonoBehaviour {
     {
         return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
         // 해당 위치 값 올림
+    }
+
+    string GetRandomTetromino()
+    {
+        int randomTetromino = Random.Range(1, 8);   // 랜덤 지정
+        string randomTetrominoName = "Prefabs/TBlock";  // 기본 지정 블록
+
+        switch(randomTetromino)
+        {
+            case 1:
+                randomTetrominoName = "Prefabs/TBlock";
+                break;
+            case 2:
+                randomTetrominoName = "Prefabs/IBlock";
+                break;
+            case 3:
+                randomTetrominoName = "Prefabs/OBlock";
+                break;
+            case 4:
+                randomTetrominoName = "Prefabs/LBlock";
+                break;
+            case 5:
+                randomTetrominoName = "Prefabs/L2Block";
+                break;
+            case 6:
+                randomTetrominoName = "Prefabs/SBlock";
+                break;
+            case 7:
+                randomTetrominoName = "Prefabs/S2Block";
+                break;
+        }
+        return randomTetrominoName;
     }
 }

@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4611280601057762}
   - component: {fileID: 114453811594489610}
-  - component: {fileID: 114137266907751598}
+  - component: {fileID: 114589094663815506}
   m_Layer: 0
   m_Name: S2Block
   m_TagString: Untagged
@@ -161,17 +161,6 @@ Transform:
   m_Father: {fileID: 4611280601057762}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114137266907751598
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1866659980222864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6154fd0d175c2f4bbc63cd79885fa88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114453811594489610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -184,6 +173,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 1
+  allowRoatation: 1
+  limitRoatiotion: 1
+--- !u!114 &114589094663815506
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866659980222864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6154fd0d175c2f4bbc63cd79885fa88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212022802365218318
 SpriteRenderer:
   m_ObjectHideFlags: 1

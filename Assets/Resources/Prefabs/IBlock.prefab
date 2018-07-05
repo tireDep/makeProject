@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4088592090791508}
   - component: {fileID: 114594598297873456}
-  - component: {fileID: 114599963497202846}
+  - component: {fileID: 114695171062500420}
   m_Layer: 0
   m_Name: IBlock
   m_TagString: Untagged
@@ -173,7 +173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 1
---- !u!114 &114599963497202846
+  allowRoatation: 1
+  limitRoatiotion: 1
+--- !u!114 &114695171062500420
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

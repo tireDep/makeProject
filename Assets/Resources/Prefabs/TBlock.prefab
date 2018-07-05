@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4552923340106224}
   - component: {fileID: 114615967513085366}
-  - component: {fileID: 114288525815498944}
+  - component: {fileID: 114202909518628228}
   m_Layer: 0
   m_Name: TBlock
   m_TagString: Untagged
@@ -161,7 +161,7 @@ Transform:
   m_Father: {fileID: 4552923340106224}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114288525815498944
+--- !u!114 &114202909518628228
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -184,6 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 1
+  allowRoatation: 1
+  limitRoatiotion: 0
 --- !u!212 &212032398290229050
 SpriteRenderer:
   m_ObjectHideFlags: 1

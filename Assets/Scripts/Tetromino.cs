@@ -6,6 +6,9 @@ public class Tetromino : MonoBehaviour {
     float fall = 0;
     public float fallSpeed = 1; // 떨어지는 속도
 
+    public bool allowRoatation = true;
+    public bool limitRoatiotion = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -30,25 +33,55 @@ public class Tetromino : MonoBehaviour {
         {
             transform.position += new Vector3(-1, 0, 0);
 
-            if (CheckIsValidPosition()){
-            }else
+            if (CheckIsValidPosition()){ }
+            else
                 transform.position += new Vector3(1, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow)) // 위쪽 화살표 입력
         {
-            transform.Rotate(0, 0, 90); // 90도 회전
+            if (allowRoatation)
+            {
+                if (limitRoatiotion)
+                {
+                    if(transform.rotation.eulerAngles.z>=90)
+                        transform.Rotate(0, 0, -90);
+                    else
+                        transform.Rotate(0, 0, 90);
+                }
+                else
+                    transform.Rotate(0, 0, 90); // 90도 회전
 
-            if(CheckIsValidPosition()){
-            }else
-                transform.Rotate(0, 0, -90);
+               if (CheckIsValidPosition()){ }
+                else
+                {
+                    if (limitRoatiotion)
+                    {
+                        if (transform.rotation.eulerAngles.z >= 90)
+                        {
+                            transform.Rotate(0, 0, -90);
+                        }
+                        else
+                        {
+                            transform.Rotate(0, 0, 90);
+                        }
+                    }
+                    else
+                        transform.Rotate(0, 0, -90);
+                }  
+             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time-fall>=fallSpeed) // 아래쪽 화살표 입력 or 자동으로 한칸씩 떨어짐
         {
             transform.position += new Vector3(0, -1, 0);    // 아래로 한 칸 이동
 
-            if (CheckIsValidPosition()){
-            }else
+            if (CheckIsValidPosition()){ }
+            else
+            {
                 transform.position += new Vector3(0, 1, 0);
+                enabled = false;
+                FindObjectOfType<Game>().SpawnNextTetromino();
+            }
+                
 
             fall = Time.time;   // 떨어지는 속도 증가!
             // 시간 - 지난 시간 >= 떨어지는 속도
