@@ -15,12 +15,61 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }   // 함수 끝
+
+    // 업데이트 클래스는 필요없으므로 삭제함     -> 프레임당 불러올게 없음
+
+    public bool IsFullRowAt(int y) // 행이 다 차있는지 검사하는 함수
+    {
+        for(int x = 0; x < gridWidth; ++x)
+        {
+            if (grid[x, y] == null)
+                return false;
+        }
+        return true;
+    }   // 함수 끝
+
+    public void DeleteMinoAt(int y) // 블록 제거
+    {
+        for(int x = 0; x < gridWidth; ++x)
+        {
+            Destroy(grid[x, y].gameObject);
+
+            grid[x, y] = null;
+        }
+    }   // 함수 끝
+
+    public void MoveRowDown(int y)  // 행 내리기
+    {
+        for(int x = 0;x < gridWidth;++x)
+        {
+            if(grid[x,y]!=null)
+            {
+                grid[x, y - 1] = grid[x, y];
+                grid[x, y] = null;
+                grid[x, y - 1].position += new Vector3(0, -1, 0);
+            }
+        }
+    }   // 함수 끝
+
+    public void MoveAllRowsDown(int y)  // 전체 행 내리기
+    {
+        for (int i = y; i < gridHeight; ++i)
+            MoveRowDown(i);
+    }   // 함수 끝
+
+    public void DeleteRow() // 행 삭제
+    {
+        for(int y = 0; y < gridHeight; ++y)
+        {
+            if(IsFullRowAt(y))  // 행이 다 차있을 경우 
+            {
+                DeleteMinoAt(y);    // 블록제거
+                MoveAllRowsDown(y + 1); // 행 내리기
+                --y;
+            }
+        }
+    }   // 함수 끝
 
     public void UpdateGrid(Tetromino tetromino) // 전체 공간 계산(남은공간)
     {

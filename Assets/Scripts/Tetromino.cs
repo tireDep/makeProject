@@ -80,7 +80,11 @@ public class Tetromino : MonoBehaviour {
             else
             {
                 transform.position += new Vector3(0, 1, 0);
+
+                FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+
                 enabled = false;    // 실행 유무..?
+
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
             }
             fall = Time.time;   // 떨어지는 속도 증가!
