@@ -19,6 +19,23 @@ public class Game : MonoBehaviour {
 
     // 업데이트 클래스는 필요없으므로 삭제함     -> 프레임당 불러올게 없음
 
+    public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
+    {
+        for(int x=0;x<gridWidth;++x)
+        {
+            foreach(Transform mino in tetromino.transform)
+            {
+                Vector2 pos = Round(mino.position);
+
+                if(pos.y>gridHeight-1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }   // 함수 끝
+
     public bool IsFullRowAt(int y) // 행이 다 차있는지 검사하는 함수
     {
         for(int x = 0; x < gridWidth; ++x)
@@ -157,4 +174,8 @@ public class Game : MonoBehaviour {
         return randomTetrominoName;
     }   // 함수 끝
 
+    public void GameOver()  // 게임오버
+    {
+        Application.LoadLevel("GameOver");
+    }   // 함수 끝
 }

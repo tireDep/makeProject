@@ -83,6 +83,11 @@ public class Tetromino : MonoBehaviour {
 
                 FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
 
+                if(FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
+                {
+                    FindObjectOfType<Game>().GameOver();
+                }
+
                 enabled = false;    // 실행 유무..?
 
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
