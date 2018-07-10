@@ -11,7 +11,12 @@ public class Tetromino : MonoBehaviour {
     public bool limitRoatiotion = false;
     // 회전 관련 변수, 유니티에서 직접 수정 가능
 
-	// Use this for initialization
+    public int individualScore = 100;
+    // 놓는 속도에 따라서 달라지는 점수 변수 
+
+    private float individualScoreTime;
+    // 놓는 속도 계산 변수
+
 	void Start () {
 		
 	}
@@ -19,7 +24,21 @@ public class Tetromino : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {    // 프레임 당 실행
         CheckUserInput();
+        UpdateIndividualScore();
 	}   // 함수 끝
+
+    void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
+    {
+        if(individualScoreTime<1)   // 시간이 1초보다 작을 때
+        {
+            individualScoreTime += Time.deltaTime;  // 플레이어의 시간을 더해줌
+        }
+        else
+        {
+            individualScoreTime = 0;
+            individualScore = Mathf.Max(individualScore - 10,0);
+        }
+    }
 
     void CheckUserInput()   // 게임 입력 함수
     {
@@ -88,11 +107,12 @@ public class Tetromino : MonoBehaviour {
                     FindObjectOfType<Game>().GameOver();
                 }
 
-                enabled = false;    // 실행 유무..?
-
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
+                Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
+
+                enabled = false;    // 실행 유무..?
             }
-            fall = Time.time;   // 떨어지는 속도 증가!
+            fall = Time.time;   // 떨어지는 속도 변경
             // 시간 - 지난 시간 >= 떨어지는 속도
         }
         // 스페이스바 -> 한번에 떨어지는 것 추가하기
