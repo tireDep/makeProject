@@ -1,6 +1,7 @@
 ﻿// 블록관련 클래스, 각각의 블록에 적용됨
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;  // 씬 불러오기
 using UnityEngine;
 
 public class Tetromino : MonoBehaviour {
@@ -65,6 +66,11 @@ public class Tetromino : MonoBehaviour {
             horizontalTimer = 0;
             verticalTimer = 0;
             buttonDownWaitTimer = 0;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("GameOver");
         }
 
         if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
