@@ -17,7 +17,6 @@ public class Tetromino : MonoBehaviour {
     private float individualScoreTime;
     // 놓는 속도 계산 변수
 
-<<<<<<< HEAD
     // 음악관련변수들추가 * 3
 
     private float continuousVerticalSpeed = 0.05f;  // 아래 화살표 누를 때의 속도
@@ -35,9 +34,6 @@ public class Tetromino : MonoBehaviour {
     // 한 번 or 계속 누르고 있는지 판별 변수
 
     void Start () {
-=======
-	void Start () {
->>>>>>> 5c758db10ac70e63ee3f2c34f6b4d604df63db8c
 		
 	}   // 함수 끝
 	
@@ -196,10 +192,7 @@ public class Tetromino : MonoBehaviour {
                     FindObjectOfType<Game>().GameOver();
                 }
 
-<<<<<<< HEAD
                 // 나중에 음악 추가시 getkey로 변경!
-=======
->>>>>>> 5c758db10ac70e63ee3f2c34f6b4d604df63db8c
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
                 Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
 
