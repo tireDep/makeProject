@@ -17,11 +17,26 @@ public class Tetromino : MonoBehaviour {
     private float individualScoreTime;
     // 놓는 속도 계산 변수
 
-	void Start () {
+    // 음악관련변수들추가 * 3
+
+    private float continuousVerticalSpeed = 0.05f;  // 아래 화살표 누를 때의 속도
+    private float continuousHorizontalSpeed = 0.1f; // 좌우 화살표 누를 때의 속도
+    private float buttonDownWaitMax = 0.2f; // 버튼을 누르고 있는 것을 인식하기까지 기다리는 속도 -> 계속 누르고 있을 때
+    // 움직이는 속도 변수들
+
+    private float verticalTimer = 0;
+    private float horizontalTimer = 0;
+    private float buttonDownWaitTimer = 0;
+    // 타이머 변수들
+
+    private bool moveImmediateHorizontal = false;
+    private bool moveImmediateVertical = false;
+    // 한 번 or 계속 누르고 있는지 판별 변수
+
+    void Start () {
 		
-	}
+	}   // 함수 끝
 	
-	// Update is called once per frame
 	void Update () {    // 프레임 당 실행
         CheckUserInput();
         UpdateIndividualScore();
@@ -42,24 +57,74 @@ public class Tetromino : MonoBehaviour {
 
     void CheckUserInput()   // 게임 입력 함수
     {
-        if(Input.GetKeyDown(KeyCode.RightArrow))    // 오른쪽 화살표 입력
+        if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow))    // 키를 놓았을 때, 타이머 변수 초기화
         {
+            moveImmediateHorizontal = false;
+            moveImmediateVertical = false;
+
+            horizontalTimer = 0;
+            verticalTimer = 0;
+            buttonDownWaitTimer = 0;
+        }
+
+        if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
+        {
+            if (moveImmediateHorizontal)    // 계속 누르고 있을 때
+            {
+                if (buttonDownWaitTimer < buttonDownWaitMax)   // 딜레이 시간
+                {
+                    buttonDownWaitTimer += Time.deltaTime;
+                    return;
+                }
+
+                if (horizontalTimer < continuousHorizontalSpeed) // 움직인 시간(누른 시간)에 따라서 속력이 결정됨 
+                {
+                    horizontalTimer += Time.deltaTime;
+                    return; // 끝남을 의미함
+                }
+            }
+            if (!moveImmediateHorizontal)   // 한번만 누를 경우
+                moveImmediateHorizontal = true;
+
+            horizontalTimer = 0;    // 초기화
+
             transform.position += new Vector3(1, 0, 0);
 
             if(CheckIsValidPosition()) // 존재하고 있는지 확인
                 FindObjectOfType<Game>().UpdateGrid(this); // 공간 계산
             else
                 transform.position += new Vector3(-1, 0, 0);
-        }
-        else if(Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표 입력
+        }   // 오른쪽 끝
+
+        else if(Input.GetKey(KeyCode.LeftArrow)) // 왼쪽 화살표 입력
         {
+            if(moveImmediateHorizontal) // 계속 누르고 있을 때
+            {
+                if (buttonDownWaitTimer < buttonDownWaitMax)    // 딜레이 시간
+                {
+                    buttonDownWaitTimer += Time.deltaTime;
+                    return;
+                }
+
+                if (horizontalTimer < continuousHorizontalSpeed) // 움직인 시간(누른 시간)에 따라서 속력이 결정됨 
+                {
+                    horizontalTimer += Time.deltaTime;
+                    return; // 끝남을 의미함
+                }
+            }
+            if (!moveImmediateHorizontal)   // 한번만 누를 경우
+                moveImmediateHorizontal = true;
+
+            horizontalTimer = 0;    // 초기화
+
             transform.position += new Vector3(-1, 0, 0);
 
             if (CheckIsValidPosition())  // 존재하고 있는지 확인 
                 FindObjectOfType<Game>().UpdateGrid(this); // 공간계산
             else
                 transform.position += new Vector3(1, 0, 0);
-        }
+        }   // 왼쪽 끝
+
         else if (Input.GetKeyDown(KeyCode.UpArrow)) // 위쪽 화살표 입력
         {
             if (allowRoatation) // 회전 가능
@@ -89,9 +154,29 @@ public class Tetromino : MonoBehaviour {
                         transform.Rotate(0, 0, -90);
                 }  
              }
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time-fall>=fallSpeed) // 아래쪽 화살표 입력 or 자동으로 한칸씩 떨어짐
+        } // 위쪽 끝
+
+        else if (Input.GetKey(KeyCode.DownArrow) || Time.time-fall>=fallSpeed) // 아래쪽 화살표 입력 or 자동으로 한칸씩 떨어짐
         {
+            if(moveImmediateVertical)   // 계속 누르고 있을 경우
+            {
+                if (buttonDownWaitTimer < buttonDownWaitMax)    // 딜레이 시간
+                {
+                    buttonDownWaitTimer += Time.deltaTime;
+                    return;
+                }
+
+                if (verticalTimer < continuousVerticalSpeed)   // 움직인 시간(누른 시간)에 따라서 속력이 결정됨
+                {
+                    verticalTimer += Time.deltaTime;
+                    return; // 끝남을 의미
+                }
+            }
+            if (!moveImmediateVertical) // 한번만 누를 경우
+                moveImmediateVertical = true;
+
+            verticalTimer = 0;  // 초기화
+
             transform.position += new Vector3(0, -1, 0);    // 아래로 한 칸 이동
 
             if (CheckIsValidPosition()) // 존재하고 있는지 확인 
@@ -107,6 +192,7 @@ public class Tetromino : MonoBehaviour {
                     FindObjectOfType<Game>().GameOver();
                 }
 
+                // 나중에 음악 추가시 getkey로 변경!
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
                 Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
 
@@ -114,7 +200,7 @@ public class Tetromino : MonoBehaviour {
             }
             fall = Time.time;   // 떨어지는 속도 변경
             // 시간 - 지난 시간 >= 떨어지는 속도
-        }
+        } // 아래쪽 끝
         // 스페이스바 -> 한번에 떨어지는 것 추가하기
     }   // 함수 끝
 
