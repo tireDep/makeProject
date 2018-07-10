@@ -1,7 +1,9 @@
 ﻿// 실제적인 게임 실행 클래스, grid에 적용됨
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;  // Gameover 씬 불러오기 위해 사용
 using UnityEngine;
+using UnityEngine.UI;   // 점수 계산 사용
 
 public class Game : MonoBehaviour {
 
@@ -12,12 +14,69 @@ public class Game : MonoBehaviour {
     public static Transform[,] grid = new Transform[gridWidth, gridHeight];
     // 각각의 블록이 차지하는 공간 변수
 
-	// Use this for initialization
-	void Start () {
+    public int scoreOneLine = 40;
+    public int scoreTwoLine = 100;
+    public int scoreThreeLine = 300;
+    public int scoreFourLine = 1200; // Tetris!
+    // 점수 변수
+
+    private int numberOfRowsThisTurn = 0;
+    // 몇 줄이 없어졌나 계산하는 변수
+
+    public Text UI_Score;
+    // 게임오브젝트 UI 변수 -> 유니티에서 연동가능
+
+   public static int current_score = 0;
+    // 점수계산&저장 변수
+
+    void Start() // 게임 시작 시 가장 먼저 실행
+    {
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
     }   // 함수 끝
 
-    // 업데이트 클래스는 필요없으므로 삭제함     -> 프레임당 불러올게 없음
+    void Update() // 점수 계산을 위해 업데이트 함수 재생성    -> 프레임당 점수를 불러와야 함
+    {
+        UpdateScore();  // 점수 계산
+        UpdateUI();     // UI 출력 업데이트
+    }
+
+    public void UpdateUI()  // 점수 UI 업데이트 함수
+    {
+        UI_Score.text = current_score.ToString();
+    }   // 함수 끝 
+
+    public void UpdateScore()   // 점수 계산
+    {
+        if(numberOfRowsThisTurn>0)
+        {
+            if(numberOfRowsThisTurn==1)
+                ClearedOneLine();  
+            else if(numberOfRowsThisTurn == 2)
+                ClearedTwoLine();
+            else if (numberOfRowsThisTurn == 3)
+                ClearedThreeLine();
+            else if (numberOfRowsThisTurn == 4)
+                ClearedFourLine();
+            numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
+        }
+    }   // 함수 끝
+
+    public void ClearedOneLine()    // 한 줄 삭제 점수 함수
+    {
+        current_score += scoreOneLine;
+    }   // 함수 끝
+    public void ClearedTwoLine()    // 두 줄 삭제 점수 함수
+    {
+        current_score += scoreTwoLine;
+    }   // 함수 끝
+    public void ClearedThreeLine()    // 세 줄 삭제 점수 함수
+    {
+        current_score += scoreThreeLine;
+    }   // 함수 끝
+    public void ClearedFourLine()    // 네 줄 삭제 점수 함수(테트리스)
+    {
+        current_score += scoreFourLine;
+    }   // 함수 끝
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
@@ -43,6 +102,7 @@ public class Game : MonoBehaviour {
             if (grid[x, y] == null)
                 return false;
         }
+        numberOfRowsThisTurn++; // 가득 찬 줄을 발견했을 경우, 증가 -> 점수계산에 사용함
         return true;
     }   // 함수 끝
 
@@ -176,6 +236,7 @@ public class Game : MonoBehaviour {
 
     public void GameOver()  // 게임오버
     {
-        Application.LoadLevel("GameOver");
+        // Application.LoadLevel("GameOver");
+        SceneManager.LoadScene("GameOver");
     }   // 함수 끝
 }
