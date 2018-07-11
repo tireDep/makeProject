@@ -39,8 +39,8 @@ public class Tetromino : MonoBehaviour {
 	}   // 함수 끝
 	
 	void Update () {    // 프레임 당 실행
-        CheckUserInput();
-        UpdateIndividualScore();
+        CheckUserInput();   //  유저 입력
+        UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
 	}   // 함수 끝
 
     void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
@@ -199,10 +199,10 @@ public class Tetromino : MonoBehaviour {
                 }
 
                 // 나중에 음악 추가시 getkey로 변경!
-                FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
                 Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
 
-                enabled = false;    // 실행 유무..?
+                enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
+                FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
             }
             fall = Time.time;   // 떨어지는 속도 변경
             // 시간 - 지난 시간 >= 떨어지는 속도

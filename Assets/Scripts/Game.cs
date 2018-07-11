@@ -32,6 +32,7 @@ public class Game : MonoBehaviour {
     void Start() // 게임 시작 시 가장 먼저 실행
     {
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
+        current_score = 0;  // 점수 초기화
     }   // 함수 끝
 
     void Update() // 점수 계산을 위해 업데이트 함수 재생성    -> 프레임당 점수를 불러와야 함
@@ -80,7 +81,7 @@ public class Game : MonoBehaviour {
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
-        for(int x=0;x<gridWidth;++x)
+        for(int location_x=0; location_x < gridWidth; ++location_x)
         {
             foreach(Transform mino in tetromino.transform)
             {
@@ -95,70 +96,70 @@ public class Game : MonoBehaviour {
         return false;
     }   // 함수 끝
 
-    public bool IsFullRowAt(int y) // 행이 다 차있는지 검사하는 함수
+    public bool IsFullRowAt(int location_y) // 행이 다 차있는지 검사하는 함수
     {
-        for(int x = 0; x < gridWidth; ++x)
+        for(int location_x = 0; location_x < gridWidth; ++location_x)
         {
-            if (grid[x, y] == null)
+            if (grid[location_x, location_y] == null)
                 return false;
         }
         numberOfRowsThisTurn++; // 가득 찬 줄을 발견했을 경우, 증가 -> 점수계산에 사용함
         return true;
     }   // 함수 끝
 
-    public void DeleteMinoAt(int y) // 블록 제거
+    public void DeleteMinoAt(int location_y) // 블록 제거
     {
-        for(int x = 0; x < gridWidth; ++x)
+        for(int location_x = 0; location_x < gridWidth; ++location_x)
         {
-            Destroy(grid[x, y].gameObject);
+            Destroy(grid[location_x, location_y].gameObject);
 
-            grid[x, y] = null;
+            grid[location_x, location_y] = null;
         }
     }   // 함수 끝
 
-    public void MoveRowDown(int y)  // 행 내리기
+    public void MoveRowDown(int location_y)  // 행 내리기
     {
-        for(int x = 0;x < gridWidth;++x)
+        for(int location_x = 0; location_x < gridWidth;++location_x)
         {
-            if(grid[x,y]!=null)
+            if(grid[location_x, location_y] !=null)
             {
-                grid[x, y - 1] = grid[x, y];
-                grid[x, y] = null;
-                grid[x, y - 1].position += new Vector3(0, -1, 0);
+                grid[location_x, location_y - 1] = grid[location_x, location_y];
+                grid[location_x, location_y] = null;
+                grid[location_x, location_y - 1].position += new Vector3(0, -1, 0);
             }
         }
     }   // 함수 끝
 
-    public void MoveAllRowsDown(int y)  // 전체 행 내리기
+    public void MoveAllRowsDown(int location_y)  // 전체 행 내리기
     {
-        for (int i = y; i < gridHeight; ++i)
+        for (int i = location_y; i < gridHeight; ++i)
             MoveRowDown(i);
     }   // 함수 끝
 
     public void DeleteRow() // 행 삭제
     {
-        for(int y = 0; y < gridHeight; ++y)
+        for(int location_y = 0; location_y < gridHeight; ++location_y)
         {
-            if(IsFullRowAt(y))  // 행이 다 차있을 경우 
+            if(IsFullRowAt(location_y))  // 행이 다 차있을 경우 
             {
-                DeleteMinoAt(y);    // 블록제거
-                MoveAllRowsDown(y + 1); // 행 내리기
-                --y;
+                DeleteMinoAt(location_y);    // 블록제거
+                MoveAllRowsDown(location_y + 1); // 행 내리기
+                --location_y;
             }
         }
     }   // 함수 끝
 
     public void UpdateGrid(Tetromino tetromino) // 전체 공간 계산(남은공간)
     {
-        for(int y=0; y<gridHeight;++y)
+        for(int location_y = 0; location_y < gridHeight;++location_y)
         {
-            for(int x=0; x<gridWidth; ++x)
+            for(int location_x = 0; location_x < gridWidth; ++location_x)
             {
-                if(grid[x,y]!=null)
+                if(grid[location_x, location_y] !=null)
                 {
-                    if (grid[x, y].parent == tetromino.transform)
+                    if (grid[location_x, location_y].parent == tetromino.transform)
                     {
-                        grid[x, y] = null;
+                        grid[location_x, location_y] = null;
                     }
                 }
             }
@@ -187,6 +188,8 @@ public class Game : MonoBehaviour {
     {
         GameObject nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
         // 랜덤으로 다음 블록 생성, 위치정보, 회전정보
+        // 선언되면서 사용이 되는데 직접 쓰이는게 아니라서 경고메시지 뜸..
+        // Assets/Scripts/Game.cs(188,20): warning CS0219: The variable `nextTetromino' is assigned but its value is never used
     }   // 함수 끝
 
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무

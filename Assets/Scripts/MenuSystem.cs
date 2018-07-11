@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// 게임 메뉴 시스템 관련
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Level 씬 불러오기 위해 사용
 using UnityEngine;
@@ -9,7 +10,7 @@ public class MenuSystem : MonoBehaviour {
     public void PlayStart()
     {
         SceneManager.LoadScene("Level");    // 게임 시작
-    }
+    }   //  함수 끝
 
     public void fin()
     {
@@ -18,9 +19,7 @@ public class MenuSystem : MonoBehaviour {
 #elif UNITY_WEBPLAYER
     Application.OpenURL("http://google.com");   // 구글 웹으로 전화
 #else
-        Application.Quit();
-#endif
-
         Application.Quit(); // 일반 응용프로그램, 모바일 처리 가능 but 웹이나 유니티 에디터 동작 x
-    }
+#endif
+    }   // 함수 끝
 }
