@@ -29,6 +29,16 @@ public class Game : MonoBehaviour {
    public static int current_score = 0;
     // 점수계산&저장 변수
 
+    private GameObject previewTetromino;
+    private GameObject nextTetromino;
+    // 미리보기 변수
+
+    private bool gameStarted = false;
+    // 게임 시작 유무 변수(미리보기에 필요)
+
+    private Vector2 previewTetrominoPosition = new Vector2(-6.5f, 16);
+    // 미리보기 위치
+
     void Start() // 게임 시작 시 가장 먼저 실행
     {
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
@@ -78,6 +88,13 @@ public class Game : MonoBehaviour {
     {
         current_score += scoreFourLine;
     }   // 함수 끝
+
+ /*   
+ ! 참고사항 !
+ 변수 이름 수정(x, y => location_x, location_y)
+    => for문 x,y(location_x, location_y) => 전체 공간의 공간(행&열)을 계산하기 위한 int 형 변수
+    => pos.x, pos.y => 각 객체가 가지고 있는 공간(행&열)을 계산하기 위한 Vector2 변수 // 여기서는 각 블록당 계산되는것
+*/
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
@@ -186,10 +203,28 @@ public class Game : MonoBehaviour {
 
     public void SpawnNextTetromino()    // 다음 블록 생성
     {
-        GameObject nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
-        // 랜덤으로 다음 블록 생성, 위치정보, 회전정보
-        // 선언되면서 사용이 되는데 직접 쓰이는게 아니라서 경고메시지 뜸..
-        // Assets/Scripts/Game.cs(188,20): warning CS0219: The variable `nextTetromino' is assigned but its value is never used
+        if(!gameStarted)    // 게임 시작하지 않음
+        {
+            gameStarted = true;
+            nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
+            // 랜덤으로 다음 블록 생성, 위치정보, 회전정보
+            previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
+            // 미리 블록 생성
+            previewTetromino.GetComponent<Tetromino>().enabled = false; 
+            // 미리 생성한 블록 제어x
+        }
+        else  // 게임 시작함
+        {
+            previewTetromino.transform.localPosition = new Vector2(5.0f, 20.0f);    // 미리보기 블록 위치 변경
+            nextTetromino = previewTetromino;   // 다음 블록으로 설정
+            nextTetromino.GetComponent<Tetromino>().enabled = true; // 제어 가능
+
+            previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
+            // 미리 블록 생성
+            previewTetromino.GetComponent<Tetromino>().enabled = false;
+            // 미리 생성한 블록 제어x
+        }
+
     }   // 함수 끝
 
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무

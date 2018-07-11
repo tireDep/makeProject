@@ -12,10 +12,10 @@ public class Tetromino : MonoBehaviour {
     public bool limitRoatiotion = false;
     // 회전 관련 변수, 유니티에서 직접 수정 가능
 
-    public int individualScore = 100;
+    // public int individualScore = 100;
     // 놓는 속도에 따라서 달라지는 점수 변수 
 
-    private float individualScoreTime;
+    // private float individualScoreTime;
     // 놓는 속도 계산 변수
 
     // 음악관련변수들추가 * 3
@@ -40,9 +40,10 @@ public class Tetromino : MonoBehaviour {
 	
 	void Update () {    // 프레임 당 실행
         CheckUserInput();   //  유저 입력
-        UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
+        // UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
 	}   // 함수 끝
 
+    /*
     void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
     {
         if(individualScoreTime<1)   // 시간이 1초보다 작을 때
@@ -55,6 +56,7 @@ public class Tetromino : MonoBehaviour {
             individualScore = Mathf.Max(individualScore - 10,0);
         }
     }
+    */
 
     void CheckUserInput()   // 게임 입력 함수
     {
@@ -199,7 +201,7 @@ public class Tetromino : MonoBehaviour {
                 }
 
                 // 나중에 음악 추가시 getkey로 변경!
-                Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
+                // Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
 
                 enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
                 FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
