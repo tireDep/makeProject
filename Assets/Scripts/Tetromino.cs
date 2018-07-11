@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Tetromino : MonoBehaviour {
     float fall = 0; // 낙하 속도 관련 변수
-    public float fallSpeed = 1; // 떨어지는 속도 변수, 유니티에서 직접 수정 가능
+    private float fallSpeed = 1; // 떨어지는 속도 변수, 난이도를 위해서 private으로 변경
 
     public bool allowRoatation = true;
     public bool limitRoatiotion = false;
@@ -35,8 +35,11 @@ public class Tetromino : MonoBehaviour {
     private bool moveImmediateVertical = false;
     // 한 번 or 계속 누르고 있는지 판별 변수
 
-    void Start () {
-		
+    void Start ()
+    {
+        fallSpeed = GameObject.Find("GameScript").GetComponent<Game>().fallSpeed;
+        // 블록 떨어지는 속도를 게임스크립트에서 가져옴, 유니티에서 확인 가능
+        // 효율이 좋지는 않음 -> cpu 점유율이 높아짐
 	}   // 함수 끝
 	
 	void Update () {    // 프레임 당 실행
@@ -131,7 +134,7 @@ public class Tetromino : MonoBehaviour {
             FindObjectOfType<Game>().UpdateGrid(this); // 공간계산
         else
             transform.position += new Vector3(1, 0, 0);
-    }
+    }   // 함수 끝
 
     void moveRight()    // 오른쪽 움직임
     {
@@ -160,7 +163,7 @@ public class Tetromino : MonoBehaviour {
             FindObjectOfType<Game>().UpdateGrid(this); // 공간 계산
         else
             transform.position += new Vector3(-1, 0, 0);
-    }
+    }   // 함수 끝
 
     void moveDown() // 아래로 움직임
     {
@@ -206,7 +209,7 @@ public class Tetromino : MonoBehaviour {
         }
         fall = Time.time;   // 떨어지는 속도 변경
                             // 시간 - 지난 시간 >= 떨어지는 속도
-    }
+    }   // 함수 끝
 
     void moveRotate()   // 회전(위방향키)
     {
@@ -237,7 +240,7 @@ public class Tetromino : MonoBehaviour {
                     transform.Rotate(0, 0, -90);
             }
         }
-    }
+    }   // 함수 끝
 
     bool CheckIsValidPosition() // 존재 유무, 올바른 위치인지 판별
     {

@@ -20,10 +20,21 @@ public class Game : MonoBehaviour {
     public int scoreFourLine = 1200; // Tetris!
     // 점수 변수
 
+    public float fallSpeed=1.0f;
+    // 떨어지는 속도 변수
+
+    public int currentLv = 0;
+    // 시작 레벨 변수
+
+    private int cntLineClear = 0;
+    // 삭제 줄 수 변수
+
     private int numberOfRowsThisTurn = 0;
     // 몇 줄이 없어졌나 계산하는 변수
 
     public Text UI_Score;
+    public Text UI_Lv;
+    public Text UI_Lines;
     // 게임오브젝트 UI 변수 -> 유니티에서 연동가능
 
    public static int current_score = 0;
@@ -49,11 +60,28 @@ public class Game : MonoBehaviour {
     {
         UpdateScore();  // 점수 계산
         UpdateUI();     // UI 출력 업데이트
+        UpdateLevel();  // 레벨 계산
+        UpdateSpeed();  // 속도 증가 계산
     }
 
-    public void UpdateUI()  // 점수 UI 업데이트 함수
+    void UpdateLevel()  // 레벨 함수
     {
-        UI_Score.text = current_score.ToString();
+        currentLv = cntLineClear / 10; // 10줄 삭제 후, 1이 될 경우 -> 레벨업
+        // Debug.Log("currentLv : " + currentLv);    // 확인용
+    }   // 함수 끝
+
+    void UpdateSpeed()  // 레벨에 따른 속도
+    {
+        fallSpeed = 1.0f - ((float)currentLv * 0.1f);
+        // Debug.Log("Current fall speed : " + fallSpeed); // 확인용
+    }   // 함수 끝
+    // 속도가 작아질수록 빨라짐!
+
+    public void UpdateUI()  // UI 업데이트 함수
+    {
+        UI_Score.text = current_score.ToString();   // 점수
+        UI_Lv.text = currentLv.ToString();  // 레벨
+        UI_Lines.text = cntLineClear.ToString();    // 라인 수
     }   // 함수 끝 
 
     public void UpdateScore()   // 점수 계산
@@ -74,19 +102,23 @@ public class Game : MonoBehaviour {
 
     public void ClearedOneLine()    // 한 줄 삭제 점수 함수
     {
-        current_score += scoreOneLine;
+        current_score += scoreOneLine + (currentLv * 10);   // 점수 수정
+        cntLineClear++;
     }   // 함수 끝
     public void ClearedTwoLine()    // 두 줄 삭제 점수 함수
     {
-        current_score += scoreTwoLine;
+        current_score += scoreTwoLine + (currentLv * 20);
+        cntLineClear += 2;
     }   // 함수 끝
     public void ClearedThreeLine()    // 세 줄 삭제 점수 함수
     {
-        current_score += scoreThreeLine;
+        current_score += scoreThreeLine + (currentLv * 30);
+        cntLineClear += 3;
     }   // 함수 끝
     public void ClearedFourLine()    // 네 줄 삭제 점수 함수(테트리스)
     {
-        current_score += scoreFourLine;
+        current_score += scoreFourLine + (currentLv * 40);
+        cntLineClear += 4;
     }   // 함수 끝
 
  /*   
