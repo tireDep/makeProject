@@ -20,7 +20,7 @@ public class Game : MonoBehaviour {
     public int scoreFourLine = 1200; // Tetris!
     // 점수 변수
 
-    public float fallSpeed=1.0f;
+    public static float fallSpeed=1.0f;
     // 떨어지는 속도 변수
 
     public int currentLv = 0;
@@ -48,10 +48,15 @@ public class Game : MonoBehaviour {
     // 게임 시작 유무 변수(미리보기에 필요)
 
     private Vector2 previewTetrominoPosition = new Vector2(-6.5f, 16);
-    // 미리보기 위치
+    // 미리보기 위치 변수
+
+    public static bool startLvIsZero;
+    public static int startingLv;
+    // 시작 레벨, 선택하는 레벨 변수
 
     void Start() // 게임 시작 시 가장 먼저 실행
     {
+        currentLv = startingLv;
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
         current_score = 0;  // 점수 초기화
     }   // 함수 끝
@@ -66,12 +71,16 @@ public class Game : MonoBehaviour {
 
     void UpdateLevel()  // 레벨 함수
     {
-        currentLv = cntLineClear / 10; // 10줄 삭제 후, 1이 될 경우 -> 레벨업
+        if (startLvIsZero == true || startLvIsZero==false && cntLineClear/10 > startingLv)
+            currentLv = cntLineClear / 10; // 10줄 삭제 후, 1이 될 경우 -> 레벨업
+
         // Debug.Log("currentLv : " + currentLv);    // 확인용
     }   // 함수 끝
 
     void UpdateSpeed()  // 레벨에 따른 속도
     {
+        // 0:1 / 1:0.95 / 2:0.9 / 3:0.85 / 4:0.8 / 5:0.75 / 6:0.7 / 7:0.65 / 8:0.6 / 9:0.55 
+        // 10:0.5 / 11:0.45 / 12:0.4 / 13:0.35 / 14:0.3 / 15:0.25 / 16:0.2 / 17:0.15 / 18:0.1 / 19:0.05 / 20:0.00
         fallSpeed = 1.0f - ((float)currentLv * 0.05f);  // 20Lv 까지 하기 위해서 수정함(0.1f -> 0.05f)
         // Debug.Log("Current fall speed : " + fallSpeed); // 확인용
     }   // 함수 끝

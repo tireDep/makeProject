@@ -1645,7 +1645,11 @@ MonoBehaviour:
   scoreTwoLine: 100
   scoreThreeLine: 300
   scoreFourLine: 1200
+  fallSpeed: 1
+  currentLv: 0
   UI_Score: {fileID: 0}
+  UI_Lv: {fileID: 0}
+  UI_Lines: {fileID: 0}
 --- !u!212 &212033368871309680
 SpriteRenderer:
   m_ObjectHideFlags: 1

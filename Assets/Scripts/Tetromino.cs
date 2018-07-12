@@ -37,15 +37,21 @@ public class Tetromino : MonoBehaviour {
 
     void Start ()
     {
-        fallSpeed = GameObject.Find("GameScript").GetComponent<Game>().fallSpeed;
+        // fallSpeed = GameObject.Find("GameScript").GetComponent<Game>().fallSpeed;
         // 블록 떨어지는 속도를 게임스크립트에서 가져옴, 유니티에서 확인 가능
         // 효율이 좋지는 않음 -> cpu 점유율이 높아짐
 	}   // 함수 끝
 	
 	void Update () {    // 프레임 당 실행
         CheckUserInput();   //  유저 입력
+        UpdateFallSpeed();  // 선택한 레벨에 따라 속도가 조절됨
         // UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
-	}   // 함수 끝
+    }   // 함수 끝
+
+    void UpdateFallSpeed()
+    {
+        fallSpeed = Game.fallSpeed;
+    }
 
     /*
     void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
