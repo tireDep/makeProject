@@ -7,14 +7,31 @@ using UnityEngine;
 
 public class MenuSystem : MonoBehaviour {
 
-    public Text Lvtext; // 설정한 레벨을 불러오기 위한 변수
+    public Text Lvtext;
+    // 설정한 레벨을 불러오기 위한 변수
 
-    void start()
+    public Text Highscoretext;
+    public Text Highscoretext2;
+    public Text Highscoretext3;
+    // 최고점수 변수
+
+    void Start()    // 대문자 주의..
     {
         Lvtext.text = "0";  // 시작할 때 0으로 표시
+
+       // PlayerPrefs.SetInt("highscore", 0); // 최고점수 설정
+       // 한번 실행하면 기록에 남아서 주석처리해도 적용됨
+       Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
+       Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
+       Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();
     }
 
-    public void PlayStart()
+    public void GotoMenu() // 게임시작화면 불러오는 함수
+    {
+        SceneManager.LoadScene("Gamestart");
+    }
+
+    public void PlayStart() // 게임플레이화면 불러오는 함수
     {
         if (Game.startingLv == 0)
             Game.startLvIsZero = true;
@@ -25,7 +42,7 @@ public class MenuSystem : MonoBehaviour {
         SceneManager.LoadScene("Level");    // 게임 시작
     }   //  함수 끝
 
-    public void fin()
+    public void Fin()   // 게임종료 함수
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false; // play모드를 false로
@@ -36,7 +53,7 @@ public class MenuSystem : MonoBehaviour {
 #endif
     }   // 함수 끝
 
-    public void changeLv(float value)   // 슬라이더로 시작 레벨 설정하는 함수
+    public void ChangeLv(float value)   // 슬라이더로 시작 레벨 설정하는 함수
     {
         Game.startingLv = (int)value;   // 슬라이더 값으로 시작레벨 설정
         Lvtext.text = value.ToString();

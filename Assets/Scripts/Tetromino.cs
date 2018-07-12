@@ -88,32 +88,35 @@ public class Tetromino : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
             SceneManager.LoadScene("GameOver");
+        }
 
         // else if -> if로 수정 => if문이어야지만 좌우로 계속 누를 때 고정되지 않음(else if의 경우 안됨)
         if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
         {
-            moveRight();
+            MoveRight();
         }   // 오른쪽 끝
 
         if(Input.GetKey(KeyCode.LeftArrow)) // 왼쪽 화살표 입력
         {
-            moveLeft();
+            MoveLeft();
         }   // 왼쪽 끝
 
         if (Input.GetKeyDown(KeyCode.UpArrow)) // 위쪽 화살표 입력
         {
-            moveRotate();
+            MoveRotate();
         } // 위쪽 끝
 
          if (Input.GetKey(KeyCode.DownArrow) || Time.time-fall>=fallSpeed) // 아래쪽 화살표 입력 or 자동으로 한칸씩 떨어짐
         {
-            moveDown();
+            MoveDown();
         } // 아래쪽 끝
     }   // 함수 끝
 
     // 키를 계속 누르고 있을 때, 블록이 아래로 내려가지 않는 문제 수정
-    void moveLeft() // 왼쪽 움직임
+    void MoveLeft() // 왼쪽 움직임
     {
         if (moveImmediateHorizontal) // 계속 누르고 있을 때
         {
@@ -142,7 +145,7 @@ public class Tetromino : MonoBehaviour {
             transform.position += new Vector3(1, 0, 0);
     }   // 함수 끝
 
-    void moveRight()    // 오른쪽 움직임
+    void MoveRight()    // 오른쪽 움직임
     {
         if (moveImmediateHorizontal)    // 계속 누르고 있을 때
         {
@@ -171,7 +174,7 @@ public class Tetromino : MonoBehaviour {
             transform.position += new Vector3(-1, 0, 0);
     }   // 함수 끝
 
-    void moveDown() // 아래로 움직임
+    void MoveDown() // 아래로 움직임
     {
         if (moveImmediateVertical)   // 계속 누르고 있을 경우
         {
@@ -208,7 +211,10 @@ public class Tetromino : MonoBehaviour {
             }
 
             // 나중에 음악 추가시 getkey로 변경!
-            // Game.current_score += individualScore;  // 놓는 속도에 따라 점수 계산 실행
+
+            // Game.currentScore += individualScore;  // 놓는 속도에 따라 점수 계산 실행
+            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 블록이 놓아질 때마다 호출 // 삭제!
+            // 놓는 점수를 계산하지 않기 때문에 필요x
 
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
@@ -217,7 +223,7 @@ public class Tetromino : MonoBehaviour {
                             // 시간 - 지난 시간 >= 떨어지는 속도
     }   // 함수 끝
 
-    void moveRotate()   // 회전(위방향키)
+    void MoveRotate()   // 회전(위방향키)
     {
         if (allowRoatation) // 회전 가능
         {

@@ -37,7 +37,7 @@ public class Game : MonoBehaviour {
     public Text UI_Lines;
     // 게임오브젝트 UI 변수 -> 유니티에서 연동가능
 
-   public static int current_score = 0;
+   public static int currentScore = 0;
     // 점수계산&저장 변수
 
     private GameObject previewTetromino;
@@ -54,11 +54,27 @@ public class Game : MonoBehaviour {
     public static int startingLv;
     // 시작 레벨, 선택하는 레벨 변수
 
+    private int startingHighScore;
+    private int startingHighScore2;
+    private int startingHighScore3;
+    // 시작할 때 불러오는 최고점수 변수들
+
     void Start() // 게임 시작 시 가장 먼저 실행
     {
-        currentLv = startingLv;
+        currentScore = 0;  // 점수 초기화
+        UI_Score.text = "0";    // UI로 출력
+
+        currentLv = startingLv; // 레벨 설정
+        UI_Lv.text = currentLv.ToString();  // UI로 출력
+
+        UI_Lines.text = "0";    // UI로 출력
+       
+        startingHighScore = PlayerPrefs.GetInt("highscore");
+        startingHighScore2 = PlayerPrefs.GetInt("highscore2");
+        startingHighScore3 = PlayerPrefs.GetInt("highscore3"); 
+        // 게임 시작 시 저장된 최고점수 불러옴
+
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
-        current_score = 0;  // 점수 초기화
     }   // 함수 끝
 
     void Update() // 점수 계산을 위해 업데이트 함수 재생성    -> 프레임당 점수를 불러와야 함
@@ -88,7 +104,7 @@ public class Game : MonoBehaviour {
 
     public void UpdateUI()  // UI 업데이트 함수
     {
-        UI_Score.text = current_score.ToString();   // 점수
+        UI_Score.text = currentScore.ToString();   // 점수
         UI_Lv.text = currentLv.ToString();  // 레벨
         UI_Lines.text = cntLineClear.ToString();    // 라인 수
     }   // 함수 끝 
@@ -106,28 +122,50 @@ public class Game : MonoBehaviour {
             else if (numberOfRowsThisTurn == 4)
                 ClearedFourLine();
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
+            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 줄이 삭제될 때 마다 호출함
         }
     }   // 함수 끝
 
     public void ClearedOneLine()    // 한 줄 삭제 점수 함수
     {
-        current_score += scoreOneLine + (currentLv * 10);   // 점수 수정
+        currentScore += scoreOneLine + (currentLv * 10);   // 점수 수정
         cntLineClear++;
     }   // 함수 끝
     public void ClearedTwoLine()    // 두 줄 삭제 점수 함수
     {
-        current_score += scoreTwoLine + (currentLv * 20);
+        currentScore += scoreTwoLine + (currentLv * 20);
         cntLineClear += 2;
     }   // 함수 끝
     public void ClearedThreeLine()    // 세 줄 삭제 점수 함수
     {
-        current_score += scoreThreeLine + (currentLv * 30);
+        currentScore += scoreThreeLine + (currentLv * 30);
         cntLineClear += 3;
     }   // 함수 끝
     public void ClearedFourLine()    // 네 줄 삭제 점수 함수(테트리스)
     {
-        current_score += scoreFourLine + (currentLv * 40);
+        currentScore += scoreFourLine + (currentLv * 40);
         cntLineClear += 4;
+    }   // 함수 끝
+
+    public void UpdateHighScore()   // 최고 점수 불러오는 함수
+    {
+        // if(currentScore> startingHighScore2 || currentScore > startingHighScore3 || currentScore > startingHighScore) // 현재점수가 최고점수들보다 높을 경우
+        //    PlayerPrefs.SetInt("highscore", currentScore);  // 최고점수로 저장함
+        if (currentScore > startingHighScore)   // 1등보다 클 경우
+        {
+            PlayerPrefs.SetInt("highscore3", startingHighScore2);
+            PlayerPrefs.SetInt("highscore2", startingHighScore);
+            PlayerPrefs.SetInt("highscore", currentScore);
+        }
+        else if(currentScore>startingHighScore2)    // 2등보다 클 경우
+        {
+            PlayerPrefs.SetInt("highscore3", startingHighScore2);
+            PlayerPrefs.SetInt("highscore2", currentScore);
+        }
+        else if (currentScore > startingHighScore3)  // 3등보다 클 경우
+        {
+            PlayerPrefs.SetInt("highscore3", currentScore);
+        }       
     }   // 함수 끝
 
  /*   
@@ -316,6 +354,7 @@ public class Game : MonoBehaviour {
     public void GameOver()  // 게임오버
     {
         // Application.LoadLevel("GameOver");
+        UpdateHighScore();  // 게임종료시 최고점수 갱신
         SceneManager.LoadScene("GameOver");
     }   // 함수 끝
 }
