@@ -72,7 +72,7 @@ public class Game : MonoBehaviour {
 
     void UpdateSpeed()  // 레벨에 따른 속도
     {
-        fallSpeed = 1.0f - ((float)currentLv * 0.1f);
+        fallSpeed = 1.0f - ((float)currentLv * 0.05f);  // 20Lv 까지 하기 위해서 수정함(0.1f -> 0.05f)
         // Debug.Log("Current fall speed : " + fallSpeed); // 확인용
     }   // 함수 끝
     // 속도가 작아질수록 빨라짐!
