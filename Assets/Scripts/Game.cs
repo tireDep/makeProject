@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Gameover 씬 불러오기 위해 사용
 using UnityEngine;
 using UnityEngine.UI;   // 점수 계산 사용
+using UnityStandardAssets.ImageEffects;    // 블러 스크립트 사용하기 위해서 
 
 public class Game : MonoBehaviour {
 
@@ -35,9 +36,11 @@ public class Game : MonoBehaviour {
     public Text UI_Score;
     public Text UI_Lv;
     public Text UI_Lines;
+    public Canvas UI_Canvas;    // 퍼즈 관련
+    public Canvas pauseing; // 퍼즈 관련
     // 게임오브젝트 UI 변수 -> 유니티에서 연동가능
 
-   public static int currentScore = 0;
+    public static int currentScore = 0;
     // 점수계산&저장 변수
 
     private GameObject previewTetromino;
@@ -58,6 +61,9 @@ public class Game : MonoBehaviour {
     private int startingHighScore2;
     private int startingHighScore3;
     // 시작할 때 불러오는 최고점수 변수들
+
+    public static bool isPause = false;
+    // 퍼즈 실행 유무 변수(게임 제어)
 
     void Start() // 게임 시작 시 가장 먼저 실행
     {
@@ -83,13 +89,49 @@ public class Game : MonoBehaviour {
         UpdateUI();     // UI 출력 업데이트
         UpdateLevel();  // 레벨 계산
         UpdateSpeed();  // 속도 증가 계산
-    }
+        CheckUserInput();   // 퍼즈 기능 추가
+    }   // 함수 끝
+
+    void CheckUserInput()   // 퍼즈 입력 함수
+    {
+        if(Input.GetKeyUp(KeyCode.Escape))
+        {
+            if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
+                PauseGame();
+            else // 한번 더 누를 경우 퍼즈 해제
+                ResumeGame();
+            // Time.timeScale = 0; // 시간 정지(아래로 떨어지지는 않으나 블록이 움직일 수 있음)
+        }
+    }   // 함수 끝
+
+    void PauseGame()    // 게임 퍼즈 함수
+    {
+        Time.timeScale = 0;
+        isPause = true; // 퍼즈 상태
+        UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
+        pauseing.enabled = true;    // 퍼즈 출력
+        Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+        // audioSorce.Pause(); // 오디오 관련
+
+        // 게임종료 선택시
+        // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
+        // SceneManager.LoadScene("GameOver");
+    }   // 함수 끝
+
+    void ResumeGame()   // 게임 퍼즈 해제 함수
+    {
+        Time.timeScale = 1;
+        isPause = false;
+        UI_Canvas.enabled = true; // 기존 화면UI 출력 
+        pauseing.enabled = false;    // 퍼즈 출력하지 않음
+        Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+        // audioSorce.Play(); // 오디오 관련
+    }   // 함수 끝
 
     void UpdateLevel()  // 레벨 함수
     {
         if (startLvIsZero == true || startLvIsZero==false && cntLineClear/10 > startingLv)
             currentLv = cntLineClear / 10; // 10줄 삭제 후, 1이 될 경우 -> 레벨업
-
         // Debug.Log("currentLv : " + currentLv);    // 확인용
     }   // 함수 끝
 

@@ -43,15 +43,18 @@ public class Tetromino : MonoBehaviour {
 	}   // 함수 끝
 	
 	void Update () {    // 프레임 당 실행
-        CheckUserInput();   //  유저 입력
-        UpdateFallSpeed();  // 선택한 레벨에 따라 속도가 조절됨
-        // UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
+        if(!Game.isPause)   // 퍼즈 상태가 아님
+        {
+            CheckUserInput();   //  유저 입력
+            UpdateFallSpeed();  // 선택한 레벨에 따라 속도가 조절됨
+            // UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
+        }
     }   // 함수 끝
 
     void UpdateFallSpeed()
     {
         fallSpeed = Game.fallSpeed;
-    }
+    }   // 함수 끝
 
     /*
     void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
@@ -87,11 +90,13 @@ public class Tetromino : MonoBehaviour {
             buttonDownWaitTimerVertical = 0;
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        /*
+        if(Input.GetKeyDown(KeyCode.Escape))    // 기존 퍼즈 -> 강제 게임오버
         {
             FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
             SceneManager.LoadScene("GameOver");
         }
+        */
 
         // else if -> if로 수정 => if문이어야지만 좌우로 계속 누를 때 고정되지 않음(else if의 경우 안됨)
         if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
@@ -268,5 +273,4 @@ public class Tetromino : MonoBehaviour {
         }
         return true;
     }   // 함수 끝
-
 }

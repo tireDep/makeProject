@@ -7,7 +7,7 @@ public class GameoverSys : MonoBehaviour {
     public void GotoMenu() // 게임시작화면 불러오는 함수
     {
         SceneManager.LoadScene("Gamestart");
-    }
+    }   // 함수 끝
 
     public void PlayStart() // 게임플레이화면 불러오는 함수
     {

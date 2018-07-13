@@ -24,12 +24,12 @@ public class MenuSystem : MonoBehaviour {
        Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
        Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
        Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();
-    }
+    }   // 함수 끝
 
     public void GotoMenu() // 게임시작화면 불러오는 함수
     {
         SceneManager.LoadScene("Gamestart");
-    }
+    }   // 함수 끝
 
     public void PlayStart() // 게임플레이화면 불러오는 함수
     {
@@ -57,5 +57,5 @@ public class MenuSystem : MonoBehaviour {
     {
         Game.startingLv = (int)value;   // 슬라이더 값으로 시작레벨 설정
         Lvtext.text = value.ToString();
-    }
+    }   // 함수 끝
 }
