@@ -94,7 +94,7 @@ public class Game : MonoBehaviour {
 
     void CheckUserInput()   // 퍼즈 입력 함수
     {
-        if(Input.GetKeyUp(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
             if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
                 PauseGame();

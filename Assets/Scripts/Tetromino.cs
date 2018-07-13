@@ -90,14 +90,6 @@ public class Tetromino : MonoBehaviour {
             buttonDownWaitTimerVertical = 0;
         }
 
-        /*
-        if(Input.GetKeyDown(KeyCode.Escape))    // 기존 퍼즈 -> 강제 게임오버
-        {
-            FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
-            SceneManager.LoadScene("GameOver");
-        }
-        */
-
         // else if -> if로 수정 => if문이어야지만 좌우로 계속 누를 때 고정되지 않음(else if의 경우 안됨)
         if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
         {
@@ -118,7 +110,41 @@ public class Tetromino : MonoBehaviour {
         {
             MoveDown();
         } // 아래쪽 끝
+
+         if(Input.GetKeyUp(KeyCode.Space))  // 스페이스바 입력 즉시하강
+        {
+            SlamDown();
+        }   // 즉시 하강
     }   // 함수 끝
+
+    public void SlamDown() // 즉시 하강
+    {
+        while(CheckIsValidPosition())
+            transform.position += new Vector3(0, -1, 0);
+
+        if(!CheckIsValidPosition())
+        {
+            transform.position += new Vector3(0, 1, 0);
+            FindObjectOfType<Game>().UpdateGrid(this);  // 공간계산
+            // 공간계산이 없을 경우, 즉시 하강을 사용한 자리에 투명 벽 생겨서 바로 게임오버됨
+
+            FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+
+            if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
+            {
+                FindObjectOfType<Game>().GameOver();
+            }
+
+            // 나중에 음악 추가시 getkey로 변경!
+
+            // Game.currentScore += individualScore;  // 놓는 속도에 따라 점수 계산 실행
+            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 블록이 놓아질 때마다 호출 // 삭제!
+            // 놓는 점수를 계산하지 않기 때문에 필요x
+
+            enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
+            FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
+        }
+    }
 
     // 키를 계속 누르고 있을 때, 블록이 아래로 내려가지 않는 문제 수정
     void MoveLeft() // 왼쪽 움직임
@@ -180,7 +206,7 @@ public class Tetromino : MonoBehaviour {
     }   // 함수 끝
 
     void MoveDown() // 아래로 움직임
-    {
+    {       
         if (moveImmediateVertical)   // 계속 누르고 있을 경우
         {
             if (buttonDownWaitTimerVertical < buttonDownWaitMax)    // 딜레이 시간
@@ -207,7 +233,7 @@ public class Tetromino : MonoBehaviour {
         else
         {
             transform.position += new Vector3(0, 1, 0);
-
+            // 나중에 음악, 다른 기능 추가시 slam도 업데이트해야함(이 아래로)!
             FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
