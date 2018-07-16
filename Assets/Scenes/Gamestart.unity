@@ -512,7 +512,7 @@ GameObject:
   - component: {fileID: 677821886}
   - component: {fileID: 677821885}
   m_Layer: 5
-  m_Name: Lv.
+  m_Name: Lv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -802,7 +802,7 @@ GameObject:
   - component: {fileID: 760266789}
   - component: {fileID: 760266788}
   m_Layer: 5
-  m_Name: Lv._text
+  m_Name: Lv_text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1820,7 +1820,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 185871313}
         m_MethodName: ChangeLv
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

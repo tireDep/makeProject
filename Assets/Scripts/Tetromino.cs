@@ -12,12 +12,6 @@ public class Tetromino : MonoBehaviour {
     public bool limitRoatiotion = false;
     // 회전 관련 변수, 유니티에서 직접 수정 가능
 
-    // public int individualScore = 100;
-    // 놓는 속도에 따라서 달라지는 점수 변수 
-
-    // private float individualScoreTime;
-    // 놓는 속도 계산 변수
-
     // 음악관련변수들추가 * 3
 
     private float continuousVerticalSpeed = 0.05f;  // 아래 화살표 누를 때의 속도
@@ -37,17 +31,14 @@ public class Tetromino : MonoBehaviour {
 
     void Start ()
     {
-        // fallSpeed = GameObject.Find("GameScript").GetComponent<Game>().fallSpeed;
-        // 블록 떨어지는 속도를 게임스크립트에서 가져옴, 유니티에서 확인 가능
-        // 효율이 좋지는 않음 -> cpu 점유율이 높아짐
-	}   // 함수 끝
-	
-	void Update () {    // 프레임 당 실행
-        if(!Game.isPause)   // 퍼즈 상태가 아님
+        Time.timeScale = 1; // 이거 안하면 재시작때 렉걸림
+    }   // 함수 끝
+
+void Update () {    // 프레임 당 실행
+        if (!Game.isPause)   // 퍼즈 상태가 아님
         {
             CheckUserInput();   //  유저 입력
             UpdateFallSpeed();  // 선택한 레벨에 따라 속도가 조절됨
-            // UpdateIndividualScore();    // 놓는 속도에 따른 점수 계산
         }
     }   // 함수 끝
 
@@ -55,21 +46,6 @@ public class Tetromino : MonoBehaviour {
     {
         fallSpeed = Game.fallSpeed;
     }   // 함수 끝
-
-    /*
-    void UpdateIndividualScore()    // 떨어지는 속도에 따른 점수 계산 함수
-    {
-        if(individualScoreTime<1)   // 시간이 1초보다 작을 때
-        {
-            individualScoreTime += Time.deltaTime;  // 플레이어의 시간을 더해줌
-        }
-        else
-        {
-            individualScoreTime = 0;
-            individualScore = Mathf.Max(individualScore - 10,0);
-        }
-    }
-    */
 
     void CheckUserInput()   // 게임 입력 함수
     {

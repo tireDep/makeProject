@@ -65,8 +65,12 @@ public class Game : MonoBehaviour {
     public static bool isPause = false;
     // 퍼즈 실행 유무 변수(게임 제어)
 
+    // private GameObject ghostBlock;
+    // 고스트 기능
+
     void Start() // 게임 시작 시 가장 먼저 실행
     {
+        isPause = false;
         currentScore = 0;  // 점수 초기화
         UI_Score.text = "0";    // UI로 출력
 
@@ -79,55 +83,86 @@ public class Game : MonoBehaviour {
         startingHighScore2 = PlayerPrefs.GetInt("highscore2");
         startingHighScore3 = PlayerPrefs.GetInt("highscore3"); 
         // 게임 시작 시 저장된 최고점수 불러옴
-
+        
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
     }   // 함수 끝
 
     void Update() // 점수 계산을 위해 업데이트 함수 재생성    -> 프레임당 점수를 불러와야 함
     {
-        UpdateScore();  // 점수 계산
-        UpdateUI();     // UI 출력 업데이트
-        UpdateLevel();  // 레벨 계산
-        UpdateSpeed();  // 속도 증가 계산
+        if(!isPause)
+        {
+            UpdateScore();  // 점수 계산
+            UpdateUI();     // UI 출력 업데이트
+            UpdateLevel();  // 레벨 계산
+            UpdateSpeed();  // 속도 증가 계산
+        }
         CheckUserInput();   // 퍼즈 기능 추가
     }   // 함수 끝
 
-    void CheckUserInput()   // 퍼즈 입력 함수
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
+     void CheckUserInput()   // 퍼즈 입력 함수
+     {
+         if (Input.GetKeyDown(KeyCode.Escape))
+         {
             if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
-                PauseGame();
-            else // 한번 더 누를 경우 퍼즈 해제
-                ResumeGame();
+            {   // PauseGame();
+                Time.timeScale = 0;
+                isPause = true; // 퍼즈 상태
+                UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
+                pauseing.enabled = true;    // 퍼즈 출력
+                Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+                                                                    // audioSorce.Pause(); // 오디오 관련
+
+                // 게임종료 선택시
+                // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
+                // SceneManager.LoadScene("GameOver");
+            }
+            else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
+            {   //ResumeGame();
+                Time.timeScale = 1;
+                isPause = false;
+                UI_Canvas.enabled = true; // 기존 화면UI 출력 
+                pauseing.enabled = false;    // 퍼즈 출력하지 않음
+                Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+                                                                     // audioSorce.Play(); // 오디오 관련
+            }
             // Time.timeScale = 0; // 시간 정지(아래로 떨어지지는 않으나 블록이 움직일 수 있음)
         }
-    }   // 함수 끝
+     }   // 함수 끝
 
-    void PauseGame()    // 게임 퍼즈 함수
-    {
-        Time.timeScale = 0;
-        isPause = true; // 퍼즈 상태
-        UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
-        pauseing.enabled = true;    // 퍼즈 출력
-        Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-        // audioSorce.Pause(); // 오디오 관련
+    /* void PauseGame()    // 게임 퍼즈 함수
+     {
+         Time.timeScale = 0;
+         isPause = true; // 퍼즈 상태
+         UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
+         pauseing.enabled = true;    // 퍼즈 출력
+         Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+         // audioSorce.Pause(); // 오디오 관련
 
-        // 게임종료 선택시
-        // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
-        // SceneManager.LoadScene("GameOver");
-    }   // 함수 끝
+         // 게임종료 선택시
+         // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
+         // SceneManager.LoadScene("GameOver");
+     }   // 함수 끝
 
-    void ResumeGame()   // 게임 퍼즈 해제 함수
+     void ResumeGame()   // 게임 퍼즈 해제 함수
+     {
+         Time.timeScale = 1;
+         isPause = false;
+         UI_Canvas.enabled = true; // 기존 화면UI 출력 
+         pauseing.enabled = false;    // 퍼즈 출력하지 않음
+         Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+         // audioSorce.Play(); // 오디오 관련
+     }   // 함수 끝
+     */
+
+    public void ExitPause()
     {
         Time.timeScale = 1;
         isPause = false;
         UI_Canvas.enabled = true; // 기존 화면UI 출력 
         pauseing.enabled = false;    // 퍼즈 출력하지 않음
         Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-        // audioSorce.Play(); // 오디오 관련
-    }   // 함수 끝
-
+                                                             // audioSorce.Play(); // 오디오 관련
+    }
     void UpdateLevel()  // 레벨 함수
     {
         if (startLvIsZero == true || startLvIsZero==false && cntLineClear/10 > startingLv)
@@ -347,6 +382,14 @@ public class Game : MonoBehaviour {
         }
 
     }   // 함수 끝
+
+    /*public void SpawnGhostTetromino()   // 고스트 블록 생성
+    {
+        Destroy(GameObject.FindGameObjectWithTag("currentGhostTetromino")); // 기존 고스트 삭제
+        ghostBlock = (GameObject)Instantiate(nextTetromino,nextTetromino.transform.position),Quaternion.identity);
+        Destroy(ghostBlock.GetComponent<Tetromino>());
+        ghostBlock.AddComponent<ghostTetromino>();
+    }*/
 
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무
     {
