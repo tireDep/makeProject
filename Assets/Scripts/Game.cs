@@ -47,11 +47,17 @@ public class Game : MonoBehaviour {
     private GameObject nextTetromino;
     // 미리보기 변수
 
+    private GameObject holdedTetromino;
+    // 홀드 변수
+
     private bool gameStarted = false;
     // 게임 시작 유무 변수(미리보기에 필요)
 
     private Vector2 previewTetrominoPosition = new Vector2(-6.5f, 16);
     // 미리보기 위치 변수
+
+    private Vector2 HoldTetrominoPosition = new Vector2(-6.5f, 10);
+    // 홀드 위치 변수
 
     public static bool startLvIsZero;
     public static int startingLv;
@@ -64,6 +70,10 @@ public class Game : MonoBehaviour {
 
     public static bool isPause = false;
     // 퍼즈 실행 유무 변수(게임 제어)
+
+    public int maxSwaps = 2; // 홀드 제어 변수
+    private int currentSwaps = 0;    // 홀드 횟수 변수
+    // 홀드 관련 변수
 
     // private GameObject ghostBlock;
     // 고스트 기능
@@ -107,6 +117,11 @@ public class Game : MonoBehaviour {
                 PauseGame();
             else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
                ResumeGame();
+        }
+         if(Input.GetKeyUp(KeyCode.LeftShift))  // Input.GetKeyUp(KeyCode.RightShift)||
+        {
+            GameObject tempNextTetromino = GameObject.FindGameObjectWithTag("currentActiveTetromino");
+            HoldTetromino(tempNextTetromino.transform);
         }
      }   // 함수 끝
 
@@ -208,6 +223,20 @@ public class Game : MonoBehaviour {
             PlayerPrefs.SetInt("highscore3", currentScore);
         }       
     }   // 함수 끝
+    
+    bool CheckIsValidPosition(GameObject tetromino)    // 홀드 함수
+    {
+        foreach(Transform mino in tetromino.transform)
+        {
+            Vector2 pos = Round(mino.position);
+            if (!CheckInsideGrid(pos))
+               return false;
+
+            if (GetTransformAtGridPosition(pos) != null && GetTransformAtGridPosition(pos).parent != tetromino.transform)
+               return false;
+        }
+        return true;
+    }
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
@@ -315,29 +344,76 @@ public class Game : MonoBehaviour {
     }   // 함수 끝
 
     public void SpawnNextTetromino()    // 다음 블록 생성
-    {
-        if(!gameStarted)    // 게임 시작하지 않음
+    {   
+        // 추가할 것! ->  프리뷰 3개 생성
+        if(!gameStarted)    // 첫 시작
         {
             gameStarted = true;
             nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
             // 랜덤으로 다음 블록 생성, 위치정보, 회전정보
             previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
             // 미리 블록 생성
-            previewTetromino.GetComponent<Tetromino>().enabled = false; 
+            previewTetromino.GetComponent<Tetromino>().enabled = false;
             // 미리 생성한 블록 제어x
+
+            nextTetromino.tag = "currentActiveTetromino";   // 태그 설정
         }
-        else  // 게임 시작함
+        else  // 첫 시작 이후
         {
             previewTetromino.transform.localPosition = new Vector2(5.0f, 20.0f);    // 미리보기 블록 위치 변경
             nextTetromino = previewTetromino;   // 다음 블록으로 설정
             nextTetromino.GetComponent<Tetromino>().enabled = true; // 제어 가능
-
+            nextTetromino.tag = "currentActiveTetromino";   // 태그 설정
             previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
             // 미리 블록 생성
             previewTetromino.GetComponent<Tetromino>().enabled = false;
             // 미리 생성한 블록 제어x
         }
+        currentSwaps = 0;   // 교체횟수 리셋
+    }   // 함수 끝
 
+    public void HoldTetromino(Transform t)  // 블록 저장
+    {
+        // 추가? -> 홀드 증가?(적용하면 ls : 저장, rs : 사용 이런식일듯)
+        currentSwaps++;
+
+        if (currentSwaps > maxSwaps)    // 최대 교체횟수 초과시 실행x
+            return;
+        if (holdedTetromino != null) // 홀드 존재o시 교체
+        {
+            GameObject tempHoldTetromino = GameObject.FindGameObjectWithTag("currentHoldTetromino");
+            tempHoldTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);  // 중간 위치에서 저장함
+
+            if (!CheckIsValidPosition(tempHoldTetromino))
+            {
+                tempHoldTetromino.transform.localPosition = HoldTetrominoPosition;
+                return;
+            }
+            holdedTetromino = (GameObject)Instantiate(t.gameObject);
+            holdedTetromino.GetComponent<Tetromino>().enabled = false;
+            // holdedTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
+            holdedTetromino.transform.localPosition = HoldTetrominoPosition;
+            holdedTetromino.tag = "currentHoldTetromino";
+
+            nextTetromino = (GameObject)Instantiate(tempHoldTetromino);
+            nextTetromino.GetComponent<Tetromino>().enabled = true;
+            nextTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
+            nextTetromino.tag = "currentActiveTetromino";
+
+            DestroyImmediate(t.gameObject);
+            DestroyImmediate(tempHoldTetromino);
+        }
+        else // 홀드 존재x시 저장
+        {
+            holdedTetromino = (GameObject)Instantiate(GameObject.FindGameObjectWithTag("currentActiveTetromino"));
+            holdedTetromino.GetComponent<Tetromino>().enabled = false;
+            holdedTetromino.transform.localPosition = HoldTetrominoPosition;
+            holdedTetromino.tag = "currentHoldTetromino";
+
+            DestroyImmediate(GameObject.FindGameObjectWithTag("currentActiveTetromino"));
+            SpawnNextTetromino();
+        }
+        return;
     }   // 함수 끝
 
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무

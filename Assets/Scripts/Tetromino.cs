@@ -114,6 +114,7 @@ void Update () {    // 프레임 당 실행
             // 나중에 음악 추가시 getkey로 변경!
 
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
+            this.tag = "Untagged";  // 태그 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
     }
@@ -213,9 +214,11 @@ void Update () {    // 프레임 당 실행
                 FindObjectOfType<Game>().GameOver();
             }
 
-            // 나중에 음악 추가시 getkey로 변경!
+            // 나중에 음악 추가시 getkey로 변경
+            
 
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
+            this.tag = "Untagged";   // 태그 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
         fall = Time.time;   // 떨어지는 속도 변경
