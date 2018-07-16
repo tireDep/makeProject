@@ -75,8 +75,8 @@ public class Game : MonoBehaviour {
     private int currentSwaps = 0;    // 홀드 횟수 변수
     // 홀드 관련 변수
 
-    // private GameObject ghostBlock;
-    // 고스트 기능
+    private GameObject ghostTetromino;
+    // 고스트 기능 변수
 
     void Start() // 게임 시작 시 가장 먼저 실행
     {
@@ -229,7 +229,7 @@ public class Game : MonoBehaviour {
         foreach(Transform mino in tetromino.transform)
         {
             Vector2 pos = Round(mino.position);
-            if (!CheckInsideGrid(pos))
+            if (!CheckIsInsideGrid(pos))
                return false;
 
             if (GetTransformAtGridPosition(pos) != null && GetTransformAtGridPosition(pos).parent != tetromino.transform)
@@ -357,6 +357,7 @@ public class Game : MonoBehaviour {
             // 미리 생성한 블록 제어x
 
             nextTetromino.tag = "currentActiveTetromino";   // 태그 설정
+            SpawnGhostTetromino();  // 고스트 생성
         }
         else  // 첫 시작 이후
         {
@@ -368,8 +369,20 @@ public class Game : MonoBehaviour {
             // 미리 블록 생성
             previewTetromino.GetComponent<Tetromino>().enabled = false;
             // 미리 생성한 블록 제어x
+            SpawnGhostTetromino();  // 고스트 생성
         }
         currentSwaps = 0;   // 교체횟수 리셋
+    }   // 함수 끝
+
+    public void SpawnGhostTetromino()   // 고스트 생성 함수
+    {
+        if (GameObject.FindGameObjectsWithTag("currentGhostTetromino") != null)
+            Destroy(GameObject.FindGameObjectWithTag("currentGhostTetromino"));
+
+        ghostTetromino=(GameObject)Instantiate(nextTetromino,nextTetromino.transform.position,Quaternion.identity);
+
+        Destroy(ghostTetromino.GetComponent<Tetromino>());
+        ghostTetromino.AddComponent<GhostTetromino>();
     }   // 함수 끝
 
     public void HoldTetromino(Transform t)  // 블록 저장
@@ -402,6 +415,8 @@ public class Game : MonoBehaviour {
 
             DestroyImmediate(t.gameObject);
             DestroyImmediate(tempHoldTetromino);
+            DestroyImmediate(ghostTetromino);
+            FindObjectOfType<Game>().SpawnGhostTetromino();
         }
         else // 홀드 존재x시 저장
         {
@@ -416,7 +431,7 @@ public class Game : MonoBehaviour {
         return;
     }   // 함수 끝
 
-    public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무
+    public bool CheckIsInsideGrid(Vector2 pos)    // 창 안에 있는지 유무
     {
         return ((int)pos.x >= 0 && (int)pos.x < gridWidth && (int)pos.y >= 0);
         // 가로가 0보다 크거나 최대크기보다 작음 & 세로가 최소크기보다 크거나 같음

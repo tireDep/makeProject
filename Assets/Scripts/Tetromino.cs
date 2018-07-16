@@ -107,9 +107,7 @@ void Update () {    // 프레임 당 실행
             FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
-            {
                 FindObjectOfType<Game>().GameOver();
-            }
 
             // 나중에 음악 추가시 getkey로 변경!
 
@@ -262,7 +260,7 @@ void Update () {    // 프레임 당 실행
         {
             Vector2 pos = FindObjectOfType<Game>().Round(Block.position);
 
-            if (FindObjectOfType<Game>().CheckInsideGrid(pos) == false)
+            if (FindObjectOfType<Game>().CheckIsInsideGrid(pos) == false)
                 return false;
 
             if (FindObjectOfType<Game>().GetTransformAtGridPosition(pos) != null && FindObjectOfType<Game>().GetTransformAtGridPosition(pos).parent != transform)
