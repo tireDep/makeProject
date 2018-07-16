@@ -113,10 +113,6 @@ void Update () {    // 프레임 당 실행
 
             // 나중에 음악 추가시 getkey로 변경!
 
-            // Game.currentScore += individualScore;  // 놓는 속도에 따라 점수 계산 실행
-            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 블록이 놓아질 때마다 호출 // 삭제!
-            // 놓는 점수를 계산하지 않기 때문에 필요x
-
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
@@ -218,10 +214,6 @@ void Update () {    // 프레임 당 실행
             }
 
             // 나중에 음악 추가시 getkey로 변경!
-
-            // Game.currentScore += individualScore;  // 놓는 속도에 따라 점수 계산 실행
-            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 블록이 놓아질 때마다 호출 // 삭제!
-            // 놓는 점수를 계산하지 않기 때문에 필요x
 
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성

@@ -1,9 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Level 씬 불러오기 위해 사용
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GameoverSys : MonoBehaviour {
+    public Text UI_Score;
+    public static int playerScore;
+    // 게임 종료 시 점수 출력
+
+    void Start()
+    {
+        UI_Score.text = playerScore.ToString();
+    }
+
     public void GotoMenu() // 게임시작화면 불러오는 함수
     {
         SceneManager.LoadScene("Gamestart");

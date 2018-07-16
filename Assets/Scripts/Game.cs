@@ -104,32 +104,13 @@ public class Game : MonoBehaviour {
          if (Input.GetKeyDown(KeyCode.Escape))
          {
             if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
-            {   // PauseGame();
-                Time.timeScale = 0;
-                isPause = true; // 퍼즈 상태
-                UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
-                pauseing.enabled = true;    // 퍼즈 출력
-                Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-                                                                    // audioSorce.Pause(); // 오디오 관련
-
-                // 게임종료 선택시
-                // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
-                // SceneManager.LoadScene("GameOver");
-            }
+                PauseGame();
             else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
-            {   //ResumeGame();
-                Time.timeScale = 1;
-                isPause = false;
-                UI_Canvas.enabled = true; // 기존 화면UI 출력 
-                pauseing.enabled = false;    // 퍼즈 출력하지 않음
-                Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-                                                                     // audioSorce.Play(); // 오디오 관련
-            }
-            // Time.timeScale = 0; // 시간 정지(아래로 떨어지지는 않으나 블록이 움직일 수 있음)
+               ResumeGame();
         }
      }   // 함수 끝
 
-    /* void PauseGame()    // 게임 퍼즈 함수
+     void PauseGame()    // 게임 퍼즈 함수
      {
          Time.timeScale = 0;
          isPause = true; // 퍼즈 상태
@@ -138,12 +119,9 @@ public class Game : MonoBehaviour {
          Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
          // audioSorce.Pause(); // 오디오 관련
 
-         // 게임종료 선택시
-         // FindObjectOfType<Game>().UpdateHighScore();  // 게임종료시 최고점수 갱신
-         // SceneManager.LoadScene("GameOver");
      }   // 함수 끝
 
-     void ResumeGame()   // 게임 퍼즈 해제 함수
+     public void ResumeGame()   // 게임 퍼즈 해제 함수
      {
          Time.timeScale = 1;
          isPause = false;
@@ -152,17 +130,7 @@ public class Game : MonoBehaviour {
          Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
          // audioSorce.Play(); // 오디오 관련
      }   // 함수 끝
-     */
 
-    public void ExitPause()
-    {
-        Time.timeScale = 1;
-        isPause = false;
-        UI_Canvas.enabled = true; // 기존 화면UI 출력 
-        pauseing.enabled = false;    // 퍼즈 출력하지 않음
-        Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-                                                             // audioSorce.Play(); // 오디오 관련
-    }
     void UpdateLevel()  // 레벨 함수
     {
         if (startLvIsZero == true || startLvIsZero==false && cntLineClear/10 > startingLv)
@@ -172,12 +140,8 @@ public class Game : MonoBehaviour {
 
     void UpdateSpeed()  // 레벨에 따른 속도
     {
-        // 0:1 / 1:0.95 / 2:0.9 / 3:0.85 / 4:0.8 / 5:0.75 / 6:0.7 / 7:0.65 / 8:0.6 / 9:0.55 
-        // 10:0.5 / 11:0.45 / 12:0.4 / 13:0.35 / 14:0.3 / 15:0.25 / 16:0.2 / 17:0.15 / 18:0.1 / 19:0.05 / 20:0.00
         fallSpeed = 1.0f - ((float)currentLv * 0.05f);  // 20Lv 까지 하기 위해서 수정함(0.1f -> 0.05f)
-        // Debug.Log("Current fall speed : " + fallSpeed); // 확인용
     }   // 함수 끝
-    // 속도가 작아질수록 빨라짐!
 
     public void UpdateUI()  // UI 업데이트 함수
     {
@@ -199,7 +163,6 @@ public class Game : MonoBehaviour {
             else if (numberOfRowsThisTurn == 4)
                 ClearedFourLine();
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
-            // FindObjectOfType<Game>().UpdateHighScore(); // 매번 호출할 필요가 없기 때문에 줄이 삭제될 때 마다 호출함
         }
     }   // 함수 끝
 
@@ -208,16 +171,19 @@ public class Game : MonoBehaviour {
         currentScore += scoreOneLine + (currentLv * 10);   // 점수 수정
         cntLineClear++;
     }   // 함수 끝
+
     public void ClearedTwoLine()    // 두 줄 삭제 점수 함수
     {
         currentScore += scoreTwoLine + (currentLv * 20);
         cntLineClear += 2;
     }   // 함수 끝
+
     public void ClearedThreeLine()    // 세 줄 삭제 점수 함수
     {
         currentScore += scoreThreeLine + (currentLv * 30);
         cntLineClear += 3;
     }   // 함수 끝
+
     public void ClearedFourLine()    // 네 줄 삭제 점수 함수(테트리스)
     {
         currentScore += scoreFourLine + (currentLv * 40);
@@ -226,8 +192,6 @@ public class Game : MonoBehaviour {
 
     public void UpdateHighScore()   // 최고 점수 불러오는 함수
     {
-        // if(currentScore> startingHighScore2 || currentScore > startingHighScore3 || currentScore > startingHighScore) // 현재점수가 최고점수들보다 높을 경우
-        //    PlayerPrefs.SetInt("highscore", currentScore);  // 최고점수로 저장함
         if (currentScore > startingHighScore)   // 1등보다 클 경우
         {
             PlayerPrefs.SetInt("highscore3", startingHighScore2);
@@ -244,13 +208,6 @@ public class Game : MonoBehaviour {
             PlayerPrefs.SetInt("highscore3", currentScore);
         }       
     }   // 함수 끝
-
- /*   
- ! 참고사항 !
- 변수 이름 수정(x, y => location_x, location_y)
-    => for문 x,y(location_x, location_y) => 전체 공간의 공간(행&열)을 계산하기 위한 int 형 변수
-    => pos.x, pos.y => 각 객체가 가지고 있는 공간(행&열)을 계산하기 위한 Vector2 변수 // 여기서는 각 블록당 계산되는것
-*/
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
@@ -383,14 +340,6 @@ public class Game : MonoBehaviour {
 
     }   // 함수 끝
 
-    /*public void SpawnGhostTetromino()   // 고스트 블록 생성
-    {
-        Destroy(GameObject.FindGameObjectWithTag("currentGhostTetromino")); // 기존 고스트 삭제
-        ghostBlock = (GameObject)Instantiate(nextTetromino,nextTetromino.transform.position),Quaternion.identity);
-        Destroy(ghostBlock.GetComponent<Tetromino>());
-        ghostBlock.AddComponent<ghostTetromino>();
-    }*/
-
     public bool CheckInsideGrid(Vector2 pos)    // 창 안에 있는지 유무
     {
         return ((int)pos.x >= 0 && (int)pos.x < gridWidth && (int)pos.y >= 0);
@@ -438,7 +387,7 @@ public class Game : MonoBehaviour {
 
     public void GameOver()  // 게임오버
     {
-        // Application.LoadLevel("GameOver");
+        GameoverSys.playerScore = currentScore; // 최종 점수 출력
         UpdateHighScore();  // 게임종료시 최고점수 갱신
         SceneManager.LoadScene("GameOver");
     }   // 함수 끝
