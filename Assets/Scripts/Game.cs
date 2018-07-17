@@ -119,17 +119,11 @@ public class Game : MonoBehaviour {
      {
          if (Input.GetKeyDown(KeyCode.Escape))
          {
-            if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
-            {
-                PauseGame();
-                audioSource.Pause();
-            }
-            else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
-            {
-                ResumeGame();
-                audioSource.UnPause();
-            } 
             PlayHoldPauseAudio();   // 소리실행
+            if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
+                PauseGame();
+            else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
+                ResumeGame();
         }
 
          if(Input.GetKeyUp(KeyCode.RightShift) || Input.GetKeyUp(KeyCode.LeftShift))
@@ -147,17 +141,17 @@ public class Game : MonoBehaviour {
         UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
         pauseing.enabled = true;    // 퍼즈 출력
         Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-        // audioSource.Pause();
+        audioSource.Pause();
      }   // 함수 끝
 
      public void ResumeGame()   // 게임 퍼즈 해제 함수
      {
-         Time.timeScale = 1;
+        Time.timeScale = 1;
          isPause = false;
          UI_Canvas.enabled = true; // 기존 화면UI 출력 
          pauseing.enabled = false;    // 퍼즈 출력하지 않음
          Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-         //audioSource.UnPause(); // 오디오 관련
+         audioSource.UnPause(); // 오디오 관련
      }   // 함수 끝
 
     void PlayHoldPauseAudio() // 홀드 입력시 소리
@@ -165,18 +159,17 @@ public class Game : MonoBehaviour {
         audioSource.PlayOneShot(hold_pause_Sound);
     }   // 함수 끝
 
-   /* public void PlayMusicMute()    // 음소거
+    public void PlayMusicMute()    // 음소거 설정
     {
-        if (audioSource.mute != true)
-        {
-            audioSource.mute = true;
-        }
-        else
-        {
-            audioSource.mute = false;
-        }  
-    }
-    */
+        audioSource.mute = true;
+        // FindObjectOfType<Tetromino>().PlayMusicMute();
+    }   // 함수 끝
+
+    public void PlayMusicUnMute()   // 음소거 해제
+    {
+        audioSource.mute = false;
+        // FindObjectOfType<Tetromino>().PlayMusicUnMute();
+    }   // 함수 끝
 
     void UpdateLevel()  // 레벨 함수
     {

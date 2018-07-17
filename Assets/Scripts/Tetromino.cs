@@ -47,10 +47,15 @@ public class Tetromino : MonoBehaviour {
         }
     }   // 함수 끝
 
-   /* void MutePlayMusic()
+    public void PlayMusicMute()    // 음소거 설정
     {
         audioSource.mute = true;
-    }*/
+    }
+
+    public void PlayMusicUnMute()   // 음소거 해제
+    {
+        audioSource.mute = false;
+    }
 
     void UpdateFallSpeed()  // 떨어지는 속도 함수
     {
