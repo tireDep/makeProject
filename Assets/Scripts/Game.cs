@@ -1,4 +1,4 @@
-﻿// 실제적인 게임 실행 클래스, grid에 적용됨
+﻿// 실제적인 게임 실행 스크립트
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Gameover 씬 불러오기 위해 사용
@@ -78,6 +78,11 @@ public class Game : MonoBehaviour {
     private GameObject ghostTetromino;
     // 고스트 기능 변수
 
+    public AudioClip clearLineSound;// 줄 삭제 소리 변수
+    public AudioClip hold_pause_Sound; // 홀드+퍼즈 소리 변수
+    private AudioSource audioSource;    // 소리 변수
+    // 소리 변수들
+
     void Start() // 게임 시작 시 가장 먼저 실행
     {
         isPause = false;
@@ -95,6 +100,7 @@ public class Game : MonoBehaviour {
         // 게임 시작 시 저장된 최고점수 불러옴
         
         SpawnNextTetromino();   // 랜덤으로 블록 자동 생성
+        audioSource = GetComponent<AudioSource>();    // 줄 삭제 소리 불러옴
     }   // 함수 끝
 
     void Update() // 점수 계산을 위해 업데이트 함수 재생성    -> 프레임당 점수를 불러와야 함
@@ -114,26 +120,34 @@ public class Game : MonoBehaviour {
          if (Input.GetKeyDown(KeyCode.Escape))
          {
             if (Time.timeScale == 1)   // 게임이 실행중일때 퍼즈
+            {
                 PauseGame();
+                audioSource.Pause();
+            }
             else if(Time.timeScale==0) // 한번 더 누를 경우 퍼즈 해제
-               ResumeGame();
+            {
+                ResumeGame();
+                audioSource.UnPause();
+            } 
+            PlayHoldPauseAudio();   // 소리실행
         }
-         if(Input.GetKeyUp(KeyCode.LeftShift))  // Input.GetKeyUp(KeyCode.RightShift)||
+
+         if(Input.GetKeyUp(KeyCode.RightShift) || Input.GetKeyUp(KeyCode.LeftShift))
         {
             GameObject tempNextTetromino = GameObject.FindGameObjectWithTag("currentActiveTetromino");
             HoldTetromino(tempNextTetromino.transform);
+            PlayHoldPauseAudio();   // 소리 실행
         }
      }   // 함수 끝
 
      void PauseGame()    // 게임 퍼즈 함수
      {
-         Time.timeScale = 0;
-         isPause = true; // 퍼즈 상태
-         UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
-         pauseing.enabled = true;    // 퍼즈 출력
-         Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-         // audioSorce.Pause(); // 오디오 관련
-
+        Time.timeScale = 0;
+        isPause = true; // 퍼즈 상태
+        UI_Canvas.enabled = false;  // 기존 화면 UI 출력하지 않음
+        pauseing.enabled = true;    // 퍼즈 출력
+        Camera.main.GetComponent<Blur>().enabled = true;    // 퍼즈상태일 때 메인 카메라에 블러 설정
+        // audioSource.Pause();
      }   // 함수 끝
 
      public void ResumeGame()   // 게임 퍼즈 해제 함수
@@ -143,8 +157,26 @@ public class Game : MonoBehaviour {
          UI_Canvas.enabled = true; // 기존 화면UI 출력 
          pauseing.enabled = false;    // 퍼즈 출력하지 않음
          Camera.main.GetComponent<Blur>().enabled = false;    // 퍼즈상태일 때 메인 카메라에 블러 설정
-         // audioSorce.Play(); // 오디오 관련
+         //audioSource.UnPause(); // 오디오 관련
      }   // 함수 끝
+
+    void PlayHoldPauseAudio() // 홀드 입력시 소리
+    {
+        audioSource.PlayOneShot(hold_pause_Sound);
+    }   // 함수 끝
+
+   /* public void PlayMusicMute()    // 음소거
+    {
+        if (audioSource.mute != true)
+        {
+            audioSource.mute = true;
+        }
+        else
+        {
+            audioSource.mute = false;
+        }  
+    }
+    */
 
     void UpdateLevel()  // 레벨 함수
     {
@@ -178,8 +210,14 @@ public class Game : MonoBehaviour {
             else if (numberOfRowsThisTurn == 4)
                 ClearedFourLine();
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
+            PlayLineClearSound();
         }
     }   // 함수 끝
+
+    public void PlayLineClearSound()    // 줄 삭제 시 소리 함수
+    {
+        audioSource.PlayOneShot(clearLineSound);
+    }
 
     public void ClearedOneLine()    // 한 줄 삭제 점수 함수
     {

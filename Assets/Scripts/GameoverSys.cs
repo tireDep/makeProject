@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// 게임종료 화면 스크립트
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Level 씬 불러오기 위해 사용
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class GameoverSys : MonoBehaviour {
 
     void Start()
     {
-        UI_Score.text = playerScore.ToString();
+        UI_Score.text = playerScore.ToString(); // 점수 출력
     }
 
     public void GotoMenu() // 게임시작화면 불러오는 함수

@@ -1,4 +1,4 @@
-﻿// 게임 메뉴 시스템 관련
+﻿// 게임 메뉴 시스템 관련 스크립트
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Level 씬 불러오기 위해 사용
@@ -15,12 +15,10 @@ public class MenuSystem : MonoBehaviour {
     public Text Highscoretext3;
     // 최고점수 변수
 
-    void Start()    // 대문자 주의..
+    void Start()
     {
         Lvtext.text = "0";  // 시작할 때 0으로 표시
 
-       // PlayerPrefs.SetInt("highscore", 0); // 최고점수 설정
-       // 한번 실행하면 기록에 남아서 주석처리해도 적용됨
        Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
        Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
        Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();

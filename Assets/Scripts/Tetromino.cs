@@ -1,4 +1,4 @@
-﻿// 블록관련 클래스, 각각의 블록에 적용됨
+﻿// 블록관련 클래스, 각각의 블록에 적용되는 스크립트
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // 씬 불러오기
@@ -12,7 +12,11 @@ public class Tetromino : MonoBehaviour {
     public bool limitRoatiotion = false;
     // 회전 관련 변수, 유니티에서 직접 수정 가능
 
-    // 음악관련변수들추가 * 3
+    public AudioClip moveSound; // 이동 소리 변수
+    public AudioClip rotateSound;   // 회전 소리 변수
+    public AudioClip landSound; // 놓는 소리 변수
+    private AudioSource audioSource;    // 소리 변수
+    // 소리 관련 변수들
 
     private float continuousVerticalSpeed = 0.05f;  // 아래 화살표 누를 때의 속도
     private float continuousHorizontalSpeed = 0.1f; // 좌우 화살표 누를 때의 속도
@@ -31,10 +35,11 @@ public class Tetromino : MonoBehaviour {
 
     void Start ()
     {
-        Time.timeScale = 1; // 이거 안하면 재시작때 렉걸림
+        Time.timeScale = 1; // 실행 되고 있음을 표시함
+        audioSource = GetComponent<AudioSource>();  // 게임 오브젝트에서 소리를 가져옴
     }   // 함수 끝
 
-void Update () {    // 프레임 당 실행
+    void Update () {    // 프레임 당 실행 함수
         if (!Game.isPause)   // 퍼즈 상태가 아님
         {
             CheckUserInput();   //  유저 입력
@@ -42,7 +47,12 @@ void Update () {    // 프레임 당 실행
         }
     }   // 함수 끝
 
-    void UpdateFallSpeed()
+   /* void MutePlayMusic()
+    {
+        audioSource.mute = true;
+    }*/
+
+    void UpdateFallSpeed()  // 떨어지는 속도 함수
     {
         fallSpeed = Game.fallSpeed;
     }   // 함수 끝
@@ -68,34 +78,24 @@ void Update () {    // 프레임 당 실행
 
         // else if -> if로 수정 => if문이어야지만 좌우로 계속 누를 때 고정되지 않음(else if의 경우 안됨)
         if(Input.GetKey(KeyCode.RightArrow))    // 오른쪽 화살표 입력
-        {
-            MoveRight();
-        }   // 오른쪽 끝
+            MoveRight();     // 오른쪽 끝
 
         if(Input.GetKey(KeyCode.LeftArrow)) // 왼쪽 화살표 입력
-        {
-            MoveLeft();
-        }   // 왼쪽 끝
+            MoveLeft();   // 왼쪽 끝
 
         if (Input.GetKeyDown(KeyCode.UpArrow)) // 위쪽 화살표 입력
-        {
-            MoveRotate();
-        } // 위쪽 끝
+            MoveRotate();   // 위쪽 끝
 
          if (Input.GetKey(KeyCode.DownArrow) || Time.time-fall>=fallSpeed) // 아래쪽 화살표 입력 or 자동으로 한칸씩 떨어짐
-        {
-            MoveDown();
-        } // 아래쪽 끝
+            MoveDown(); // 아래쪽 끝
 
          if(Input.GetKeyUp(KeyCode.Space))  // 스페이스바 입력 즉시하강
-        {
-            SlamDown();
-        }   // 즉시 하강
+            SlamDown();   // 즉시 하강
     }   // 함수 끝
 
-    public void SlamDown() // 즉시 하강
+    public void SlamDown() // 즉시 하강 함수
     {
-        while(CheckIsValidPosition())
+        while(CheckIsValidPosition())   // 올바른 위치 판별
             transform.position += new Vector3(0, -1, 0);
 
         if(!CheckIsValidPosition())
@@ -104,7 +104,7 @@ void Update () {    // 프레임 당 실행
             FindObjectOfType<Game>().UpdateGrid(this);  // 공간계산
             // 공간계산이 없을 경우, 즉시 하강을 사용한 자리에 투명 벽 생겨서 바로 게임오버됨
 
-            FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+             FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
                 FindObjectOfType<Game>().GameOver();
@@ -113,12 +113,12 @@ void Update () {    // 프레임 당 실행
 
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";  // 태그 추가
+            PlayLandAudio();    // 소리 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
     }
 
-    // 키를 계속 누르고 있을 때, 블록이 아래로 내려가지 않는 문제 수정
-    void MoveLeft() // 왼쪽 움직임
+    void MoveLeft() // 왼쪽 움직임 함수
     {
         if (moveImmediateHorizontal) // 계속 누르고 있을 때
         {
@@ -142,12 +142,15 @@ void Update () {    // 프레임 당 실행
         transform.position += new Vector3(-1, 0, 0);
 
         if (CheckIsValidPosition())  // 존재하고 있는지 확인 
+        {
             FindObjectOfType<Game>().UpdateGrid(this); // 공간계산
+            PlayMoveAudio();    // 소리 재생
+        }
         else
             transform.position += new Vector3(1, 0, 0);
     }   // 함수 끝
 
-    void MoveRight()    // 오른쪽 움직임
+    void MoveRight()    // 오른쪽 움직임 함수
     {
         if (moveImmediateHorizontal)    // 계속 누르고 있을 때
         {
@@ -171,12 +174,15 @@ void Update () {    // 프레임 당 실행
         transform.position += new Vector3(1, 0, 0);
 
         if (CheckIsValidPosition()) // 존재하고 있는지 확인
+        {
             FindObjectOfType<Game>().UpdateGrid(this); // 공간 계산
+            PlayMoveAudio();    // 소리 재생
+        }
         else
             transform.position += new Vector3(-1, 0, 0);
     }   // 함수 끝
 
-    void MoveDown() // 아래로 움직임
+    void MoveDown() // 아래로 움직임 함수
     {       
         if (moveImmediateVertical)   // 계속 누르고 있을 경우
         {
@@ -200,12 +206,18 @@ void Update () {    // 프레임 당 실행
         transform.position += new Vector3(0, -1, 0);    // 아래로 한 칸 이동
 
         if (CheckIsValidPosition()) // 존재하고 있는지 확인 
+        {
             FindObjectOfType<Game>().UpdateGrid(this);  // 공간계산
+
+            if(Input.GetKeyDown(KeyCode.DownArrow)) // 아래 방향키 누른 경우에만 소리 재생
+                PlayMoveAudio();    // 소리 재생
+        }
         else
         {
             transform.position += new Vector3(0, 1, 0);
             // 나중에 음악, 다른 기능 추가시 slam도 업데이트해야함(이 아래로)!
-            FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+
+             FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
             {
@@ -213,10 +225,9 @@ void Update () {    // 프레임 당 실행
             }
 
             // 나중에 음악 추가시 getkey로 변경
-            
-
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";   // 태그 추가
+            PlayLandAudio();    // 소리 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
         fall = Time.time;   // 떨어지는 속도 변경
@@ -238,7 +249,10 @@ void Update () {    // 프레임 당 실행
                 transform.Rotate(0, 0, 90); // 90도 회전
 
             if (CheckIsValidPosition()) // 존재하고 있는지 확인 
+            {
                 FindObjectOfType<Game>().UpdateGrid(this); // 공간계산
+                PlayRotateAudio();  // 소리 재생
+            }  
             else
             {
                 if (limitRoatiotion)
@@ -252,6 +266,19 @@ void Update () {    // 프레임 당 실행
                     transform.Rotate(0, 0, -90);
             }
         }
+    }   // 함수 끝
+    
+    void PlayMoveAudio()    // 움직일 때 소리
+    {
+        audioSource.PlayOneShot(moveSound);
+    }   // 함수 끝
+    void PlayRotateAudio()  // 회전할 때 소리
+    {
+        audioSource.PlayOneShot(rotateSound);
+    }   // 함수 끝
+    void PlayLandAudio()    // 착지 시 소리
+    {
+        audioSource.PlayOneShot(landSound);
     }   // 함수 끝
 
     bool CheckIsValidPosition() // 존재 유무, 올바른 위치인지 판별
