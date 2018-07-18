@@ -33,10 +33,13 @@ public class Tetromino : MonoBehaviour {
     private bool moveImmediateVertical = false;
     // 한 번 or 계속 누르고 있는지 판별 변수
 
+    //public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용
+
     void Start ()
     {
         Time.timeScale = 1; // 실행 되고 있음을 표시함
         audioSource = GetComponent<AudioSource>();  // 게임 오브젝트에서 소리를 가져옴
+
     }   // 함수 끝
 
     void Update () {    // 프레임 당 실행 함수
@@ -110,6 +113,8 @@ public class Tetromino : MonoBehaviour {
             // 공간계산이 없을 경우, 즉시 하강을 사용한 자리에 투명 벽 생겨서 바로 게임오버됨
 
              FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+            //Instantiate(deleteExplosion, transform.position, Quaternion.identity);
+            // 삭제시 이펙트 추가
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
                 FindObjectOfType<Game>().GameOver();
@@ -223,6 +228,8 @@ public class Tetromino : MonoBehaviour {
             // 나중에 음악, 다른 기능 추가시 slam도 업데이트해야함(이 아래로)!
 
              FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
+            //Instantiate(deleteExplosion, transform.position, Quaternion.identity);
+            // 삭제시 이펙트 추가
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
             {

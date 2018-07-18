@@ -83,6 +83,9 @@ public class Game : MonoBehaviour {
     private AudioSource audioSource;    // 소리 변수
     // 소리 변수들
 
+    public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용
+    // 이펙트 변수
+
     void Start() // 게임 시작 시 가장 먼저 실행
     {
         isPause = false;
@@ -204,6 +207,9 @@ public class Game : MonoBehaviour {
                 ClearedFourLine();
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
             PlayLineClearSound();
+            Instantiate(deleteExplosion, transform.position, Quaternion.identity);
+            // 삭제시 이펙트 추가
+            // DestroyImmediate(deleteExplosion);
         }
     }   // 함수 끝
 
