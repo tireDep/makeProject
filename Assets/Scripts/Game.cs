@@ -83,7 +83,8 @@ public class Game : MonoBehaviour {
     private AudioSource audioSource;    // 소리 변수
     // 소리 변수들
 
-    public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용
+    public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용(배경)
+    public ParticleSystem deleteExplosionLine;  // 삭제시 이펙트 적용(줄)
     // 이펙트 변수
 
     void Start() // 게임 시작 시 가장 먼저 실행
@@ -207,9 +208,6 @@ public class Game : MonoBehaviour {
                 ClearedFourLine();
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
             PlayLineClearSound();
-            Instantiate(deleteExplosion, transform.position, Quaternion.identity);
-            // 삭제시 이펙트 추가
-            // DestroyImmediate(deleteExplosion);
         }
     }   // 함수 끝
 
@@ -303,13 +301,27 @@ public class Game : MonoBehaviour {
         return true;
     }   // 함수 끝
 
+    /*IEnumerable JustWaitErase(int location_x, int location_y)
+    {
+        yield return new WaitForSeconds(2);
+        Destroy(grid[location_x, location_y].gameObject);
+        grid[location_x, location_y] = null;
+    }   // 함수 끝
+*/
+
     public void DeleteMinoAt(int location_y) // 블록 제거
     {
         for(int location_x = 0; location_x < gridWidth; ++location_x)
         {
+            Instantiate(deleteExplosion, transform.position, Quaternion.identity);  // 배경 eff
+            Instantiate(deleteExplosionLine, grid[location_x,location_y].position, Quaternion.identity);    // 라인 eff
             Destroy(grid[location_x, location_y].gameObject);
-
             grid[location_x, location_y] = null;
+            // StartCoroutine("JustWaitErase",(location_x, location_y));
+            // Invoke("JustWaitErase(int location_x, int location_y)", 1);
+            //Invoke("JustWaitErase", 1);
+            // Destroy(grid[location_x, location_y].gameObject);
+            // grid[location_x, location_y] = null;
         }
     }   // 함수 끝
 
