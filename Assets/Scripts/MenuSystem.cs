@@ -19,15 +19,20 @@ public class MenuSystem : MonoBehaviour {
     {
         Lvtext.text = "0";  // 시작할 때 0으로 표시
 
-        //PlayerPrefs.SetInt("highscore", 0);
-        //PlayerPrefs.SetInt("highscore2", 0);
-        //PlayerPrefs.SetInt("highscore3", 0);
-        // 점수 초기화
-
        Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
        Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
        Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();
     }   // 함수 끝
+
+    public void ResetHs()
+    {
+        PlayerPrefs.SetInt("highscore", 0);
+        PlayerPrefs.SetInt("highscore2", 0);
+        PlayerPrefs.SetInt("highscore3", 0);
+        // 점수 초기화
+        Start();
+        // 초기화 하고 다시 로딩
+    }
 
     public void GotoMenu() // 게임시작화면 불러오는 함수
     {
