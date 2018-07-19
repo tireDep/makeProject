@@ -113,8 +113,6 @@ public class Tetromino : MonoBehaviour {
             // 공간계산이 없을 경우, 즉시 하강을 사용한 자리에 투명 벽 생겨서 바로 게임오버됨
 
              FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
-            //Instantiate(deleteExplosion, transform.position, Quaternion.identity);
-            // 삭제시 이펙트 추가
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
                 FindObjectOfType<Game>().GameOver();

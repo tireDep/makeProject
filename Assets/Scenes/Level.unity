@@ -797,7 +797,13 @@ MonoBehaviour:
   maxSwaps: 2
   clearLineSound: {fileID: 8300000, guid: 424c139c321d6af4a8942bd81a8c678a, type: 3}
   hold_pause_Sound: {fileID: 8300000, guid: 9637da95fbba8214283faf26fdd426c5, type: 3}
-  deleteExplosion: {fileID: 198718600685889848, guid: 5a11d39710bd2fa4a98cc896fb337f32,
+  deleteEffectOneLine: {fileID: 198718600685889848, guid: 5a11d39710bd2fa4a98cc896fb337f32,
+    type: 2}
+  deleteEffectTwoLine: {fileID: 198718600685889848, guid: a83907df60565704b87f5d19f0d0be3c,
+    type: 2}
+  deleteEffectThreeLine: {fileID: 198718600685889848, guid: 79a7cb62a488fb74b864cd6c5be72c93,
+    type: 2}
+  deleteEffectFourLine: {fileID: 198718600685889848, guid: c04d09d123453ef4d99b86969ba5983d,
     type: 2}
   deleteExplosionLine: {fileID: 19800004, guid: 5d6abb492ad81ea488535a096eb98191,
     type: 2}
@@ -809,7 +815,7 @@ Transform:
   m_PrefabInternal: {fileID: 1178483526}
   m_GameObject: {fileID: 1072945347}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 4.46, y: -0.99, z: 0.8}
+  m_LocalPosition: {x: 4.5, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1450,15 +1456,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4502144969535186, guid: 5497300ac0021cd4c8e5369a6309fec5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 4.46
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4502144969535186, guid: 5497300ac0021cd4c8e5369a6309fec5, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.99
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4502144969535186, guid: 5497300ac0021cd4c8e5369a6309fec5, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4502144969535186, guid: 5497300ac0021cd4c8e5369a6309fec5, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1520,6 +1526,30 @@ Prefab:
       propertyPath: deleteExplosionLine
       value: 
       objectReference: {fileID: 19800004, guid: 5d6abb492ad81ea488535a096eb98191,
+        type: 2}
+    - target: {fileID: 114864858916288362, guid: 5497300ac0021cd4c8e5369a6309fec5,
+        type: 2}
+      propertyPath: deleteEffectOneLine
+      value: 
+      objectReference: {fileID: 198718600685889848, guid: 5a11d39710bd2fa4a98cc896fb337f32,
+        type: 2}
+    - target: {fileID: 114864858916288362, guid: 5497300ac0021cd4c8e5369a6309fec5,
+        type: 2}
+      propertyPath: deleteEffectTwoLine
+      value: 
+      objectReference: {fileID: 198718600685889848, guid: a83907df60565704b87f5d19f0d0be3c,
+        type: 2}
+    - target: {fileID: 114864858916288362, guid: 5497300ac0021cd4c8e5369a6309fec5,
+        type: 2}
+      propertyPath: deleteEffectThreeLine
+      value: 
+      objectReference: {fileID: 198718600685889848, guid: 79a7cb62a488fb74b864cd6c5be72c93,
+        type: 2}
+    - target: {fileID: 114864858916288362, guid: 5497300ac0021cd4c8e5369a6309fec5,
+        type: 2}
+      propertyPath: deleteEffectFourLine
+      value: 
+      objectReference: {fileID: 198718600685889848, guid: c04d09d123453ef4d99b86969ba5983d,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5497300ac0021cd4c8e5369a6309fec5, type: 2}

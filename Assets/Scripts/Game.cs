@@ -1,6 +1,4 @@
 ﻿// 실제적인 게임 실행 스크립트
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;  // Gameover 씬 불러오기 위해 사용
 using UnityEngine;
 using UnityEngine.UI;   // 점수 계산 사용
@@ -83,7 +81,14 @@ public class Game : MonoBehaviour {
     private AudioSource audioSource;    // 소리 변수
     // 소리 변수들
 
-    public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용(배경)
+
+    // public static int effectZ = -1;
+    public static Transform[,,] effectgrid = new Transform[gridWidth, gridHeight, 0];
+
+    public ParticleSystem deleteEffectOneLine;   // 1줄 삭제 
+    public ParticleSystem deleteEffectTwoLine;   // 2줄 삭제 
+    public ParticleSystem deleteEffectThreeLine;   // 3줄 삭제 
+    public ParticleSystem deleteEffectFourLine;   // 4줄 삭제 
     public ParticleSystem deleteExplosionLine;  // 삭제시 이펙트 적용(줄)
     // 이펙트 변수
 
@@ -218,24 +223,29 @@ public class Game : MonoBehaviour {
 
     public void ClearedOneLine()    // 한 줄 삭제 점수 함수
     {
+        // Instantiate(deleteEffectOneLine, effectgrid[0, 0, 0].position, Quaternion.identity);  // 배경 eff
+        Instantiate(deleteEffectOneLine, transform.position, Quaternion.identity);  // 배경 eff
         currentScore += scoreOneLine + (currentLv * 10);   // 점수 수정
         cntLineClear++;
     }   // 함수 끝
 
     public void ClearedTwoLine()    // 두 줄 삭제 점수 함수
     {
+        Instantiate(deleteEffectTwoLine, transform.position, Quaternion.identity);  // 배경 eff
         currentScore += scoreTwoLine + (currentLv * 20);
         cntLineClear += 2;
     }   // 함수 끝
 
     public void ClearedThreeLine()    // 세 줄 삭제 점수 함수
     {
+        Instantiate(deleteEffectThreeLine, transform.position, Quaternion.identity);  // 배경 eff
         currentScore += scoreThreeLine + (currentLv * 30);
         cntLineClear += 3;
     }   // 함수 끝
 
     public void ClearedFourLine()    // 네 줄 삭제 점수 함수(테트리스)
     {
+        Instantiate(deleteEffectFourLine, transform.position, Quaternion.identity);  // 배경 eff
         currentScore += scoreFourLine + (currentLv * 40);
         cntLineClear += 4;
     }   // 함수 끝
@@ -301,27 +311,15 @@ public class Game : MonoBehaviour {
         return true;
     }   // 함수 끝
 
-    /*IEnumerable JustWaitErase(int location_x, int location_y)
-    {
-        yield return new WaitForSeconds(2);
-        Destroy(grid[location_x, location_y].gameObject);
-        grid[location_x, location_y] = null;
-    }   // 함수 끝
-*/
 
     public void DeleteMinoAt(int location_y) // 블록 제거
     {
         for(int location_x = 0; location_x < gridWidth; ++location_x)
         {
-            Instantiate(deleteExplosion, transform.position, Quaternion.identity);  // 배경 eff
+            // Instantiate(deleteExplosion, transform.position, Quaternion.identity);  // 배경 eff
             Instantiate(deleteExplosionLine, grid[location_x,location_y].position, Quaternion.identity);    // 라인 eff
             Destroy(grid[location_x, location_y].gameObject);
             grid[location_x, location_y] = null;
-            // StartCoroutine("JustWaitErase",(location_x, location_y));
-            // Invoke("JustWaitErase(int location_x, int location_y)", 1);
-            //Invoke("JustWaitErase", 1);
-            // Destroy(grid[location_x, location_y].gameObject);
-            // grid[location_x, location_y] = null;
         }
     }   // 함수 끝
 
