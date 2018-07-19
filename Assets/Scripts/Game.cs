@@ -81,16 +81,16 @@ public class Game : MonoBehaviour {
     private AudioSource audioSource;    // 소리 변수
     // 소리 변수들
 
-
-    // public static int effectZ = -1;
-    public static Transform[,,] effectgrid = new Transform[gridWidth, gridHeight, 0];
-
     public ParticleSystem deleteEffectOneLine;   // 1줄 삭제 
     public ParticleSystem deleteEffectTwoLine;   // 2줄 삭제 
     public ParticleSystem deleteEffectThreeLine;   // 3줄 삭제 
     public ParticleSystem deleteEffectFourLine;   // 4줄 삭제 
     public ParticleSystem deleteExplosionLine;  // 삭제시 이펙트 적용(줄)
-    // 이펙트 변수
+                                                // 이펙트 변수
+    private int pastDeleteCombo=0;
+    private int isDeleteCombo=0;
+    private int comboCount; // 콤보 수 변수
+    // 콤보 관련 변수 
 
     void Start() // 게임 시작 시 가장 먼저 실행
     {
@@ -102,6 +102,8 @@ public class Game : MonoBehaviour {
         UI_Lv.text = currentLv.ToString();  // UI로 출력
 
         UI_Lines.text = "0";    // UI로 출력
+
+        comboCount = -1; // 콤보 0으로 설정 -> 1줄 없애자마자 점수 상승 방지
 
         startingHighScore = PlayerPrefs.GetInt("highscore");
         startingHighScore2 = PlayerPrefs.GetInt("highscore2");
@@ -201,18 +203,27 @@ public class Game : MonoBehaviour {
 
     public void UpdateScore()   // 점수 계산
     {
-        if(numberOfRowsThisTurn>0)
+        Debug.Log(comboCount);
+        if (numberOfRowsThisTurn > 0)
         {
-            if(numberOfRowsThisTurn==1)
-                ClearedOneLine();  
-            else if(numberOfRowsThisTurn == 2)
+            comboCount++;   // 콤보 증가
+            if (numberOfRowsThisTurn == 1)
+                ClearedOneLine();
+            else if (numberOfRowsThisTurn == 2)
                 ClearedTwoLine();
             else if (numberOfRowsThisTurn == 3)
                 ClearedThreeLine();
             else if (numberOfRowsThisTurn == 4)
                 ClearedFourLine();
+
+            currentScore += comboCount * 100;// 콤보 점수 추가(존재하면)
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
             PlayLineClearSound();
+        }
+        else
+        {
+            if(isDeleteCombo==pastDeleteCombo)  // 현재 지운 줄수 == 과거 지운 줄수 일 경우 콤보 초기화
+                comboCount = -1;  
         }
     }   // 함수 끝
 
@@ -344,13 +355,15 @@ public class Game : MonoBehaviour {
 
     public void DeleteRow() // 행 삭제
     {
-        for(int location_y = 0; location_y < gridHeight; ++location_y)
+        pastDeleteCombo = isDeleteCombo;    // 과거 지운 줄수 = 현재 지운 줄수
+        for (int location_y = 0; location_y < gridHeight; ++location_y)
         {
             if(IsFullRowAt(location_y))  // 행이 다 차있을 경우 
             {
                 DeleteMinoAt(location_y);    // 블록제거
                 MoveAllRowsDown(location_y + 1); // 행 내리기
                 --location_y;
+                isDeleteCombo++;    // 현재 지운 줄 수 증가함
             }
         }
     }   // 함수 끝

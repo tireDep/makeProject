@@ -33,7 +33,7 @@ public class Tetromino : MonoBehaviour {
     private bool moveImmediateVertical = false;
     // 한 번 or 계속 누르고 있는지 판별 변수
 
-    public ParticleSystem downEffect; 
+    public ParticleSystem downEffect;
     // 착지 후 이펙트 적용
 
     void Start ()
