@@ -33,7 +33,8 @@ public class Tetromino : MonoBehaviour {
     private bool moveImmediateVertical = false;
     // 한 번 or 계속 누르고 있는지 판별 변수
 
-    //public ParticleSystem deleteExplosion;  // 삭제시 이펙트 적용
+    public ParticleSystem downEffect; 
+    // 착지 후 이펙트 적용
 
     void Start ()
     {
@@ -122,6 +123,9 @@ public class Tetromino : MonoBehaviour {
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";  // 태그 추가
             PlayLandAudio();    // 소리 추가
+            Instantiate(downEffect, transform.position, Quaternion.identity);  // 배경 eff
+            // 착지 이펙트 추가
+
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
     }
@@ -216,8 +220,7 @@ public class Tetromino : MonoBehaviour {
         if (CheckIsValidPosition()) // 존재하고 있는지 확인 
         {
             FindObjectOfType<Game>().UpdateGrid(this);  // 공간계산
-
-            if(Input.GetKeyDown(KeyCode.DownArrow)) // 아래 방향키 누른 경우에만 소리 재생
+            if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 방향키 누른 경우에만 소리 재생
                 PlayMoveAudio();    // 소리 재생
         }
         else
@@ -238,6 +241,10 @@ public class Tetromino : MonoBehaviour {
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";   // 태그 추가
             PlayLandAudio();    // 소리 추가
+
+            // Vector3 temp = new Vector3(transform.position.x, transform.position.y + 2, 0);
+            Instantiate(downEffect, transform.position, Quaternion.identity);  // 배경 eff
+            // 착지 이펙트 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
         fall = Time.time;   // 떨어지는 속도 변경

@@ -272,6 +272,8 @@ MonoBehaviour:
   moveSound: {fileID: 8300000, guid: 7d36a00b2636ae344aa499d1052f4699, type: 3}
   rotateSound: {fileID: 8300000, guid: 21d3cd862aba0ec4c8c4aa75eb19e560, type: 3}
   landSound: {fileID: 8300000, guid: 7a4df8bee50bb4043bd93df7acf4ed28, type: 3}
+  downEffect: {fileID: 198576367017187626, guid: 842f8521f11226943af87502aa8a893b,
+    type: 2}
 --- !u!212 &212161486405953264
 SpriteRenderer:
   m_ObjectHideFlags: 1

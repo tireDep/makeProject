@@ -102,7 +102,7 @@ public class Game : MonoBehaviour {
         UI_Lv.text = currentLv.ToString();  // UI로 출력
 
         UI_Lines.text = "0";    // UI로 출력
-       
+
         startingHighScore = PlayerPrefs.GetInt("highscore");
         startingHighScore2 = PlayerPrefs.GetInt("highscore2");
         startingHighScore3 = PlayerPrefs.GetInt("highscore3"); 
