@@ -86,7 +86,8 @@ public class Game : MonoBehaviour {
     public ParticleSystem deleteEffectThreeLine;   // 3줄 삭제 
     public ParticleSystem deleteEffectFourLine;   // 4줄 삭제 
     public ParticleSystem deleteExplosionLine;  // 삭제시 이펙트 적용(줄)
-                                                // 이펙트 변수
+     // 이펙트 변수
+
     private int pastDeleteCombo=0;
     private int isDeleteCombo=0;
     private int comboCount; // 콤보 수 변수
@@ -186,7 +187,6 @@ public class Game : MonoBehaviour {
     {
         if (startLvIsZero == true || startLvIsZero==false && cntLineClear/10 > startingLv)
             currentLv = cntLineClear / 10; // 10줄 삭제 후, 1이 될 경우 -> 레벨업
-        // Debug.Log("currentLv : " + currentLv);    // 확인용
     }   // 함수 끝
 
     void UpdateSpeed()  // 레벨에 따른 속도
@@ -206,7 +206,6 @@ public class Game : MonoBehaviour {
         Debug.Log(comboCount);
         if (numberOfRowsThisTurn > 0)
         {
-            comboCount++;   // 콤보 증가
             if (numberOfRowsThisTurn == 1)
                 ClearedOneLine();
             else if (numberOfRowsThisTurn == 2)
@@ -215,7 +214,7 @@ public class Game : MonoBehaviour {
                 ClearedThreeLine();
             else if (numberOfRowsThisTurn == 4)
                 ClearedFourLine();
-
+            comboCount++;   // 콤보 증가
             currentScore += comboCount * 100;// 콤보 점수 추가(존재하면)
             numberOfRowsThisTurn = 0;   // 점수 계산 후, 삭제 줄 수 초기화
             PlayLineClearSound();
@@ -230,11 +229,10 @@ public class Game : MonoBehaviour {
     public void PlayLineClearSound()    // 줄 삭제 시 소리 함수
     {
         audioSource.PlayOneShot(clearLineSound);
-    }
+    }   // 함수 끝
 
     public void ClearedOneLine()    // 한 줄 삭제 점수 함수
     {
-        // Instantiate(deleteEffectOneLine, effectgrid[0, 0, 0].position, Quaternion.identity);  // 배경 eff
         Instantiate(deleteEffectOneLine, transform.position, Quaternion.identity);  // 배경 eff
         currentScore += scoreOneLine + (currentLv * 10);   // 점수 수정
         cntLineClear++;
@@ -292,7 +290,7 @@ public class Game : MonoBehaviour {
                return false;
         }
         return true;
-    }
+    }   // 함수 끝
 
     public bool CheckIsAboveGrid(Tetromino tetromino)   // 블록이 맨 위에 닿았는지 검사
     {
@@ -303,9 +301,7 @@ public class Game : MonoBehaviour {
                 Vector2 pos = Round(mino.position);
 
                 if(pos.y>gridHeight-1)
-                {
                     return true;
-                }
             }
         }
         return false;
@@ -327,7 +323,6 @@ public class Game : MonoBehaviour {
     {
         for(int location_x = 0; location_x < gridWidth; ++location_x)
         {
-            // Instantiate(deleteExplosion, transform.position, Quaternion.identity);  // 배경 eff
             Instantiate(deleteExplosionLine, grid[location_x,location_y].position, Quaternion.identity);    // 라인 eff
             Destroy(grid[location_x, location_y].gameObject);
             grid[location_x, location_y] = null;
@@ -377,9 +372,7 @@ public class Game : MonoBehaviour {
                 if(grid[location_x, location_y] !=null)
                 {
                     if (grid[location_x, location_y].parent == tetromino.transform)
-                    {
                         grid[location_x, location_y] = null;
-                    }
                 }
             }
         }
@@ -389,9 +382,7 @@ public class Game : MonoBehaviour {
             Vector2 pos = Round(mino.position);
 
             if(pos.y<gridHeight)
-            {
                 grid[(int)pos.x, (int)pos.y] = mino;
-            }
         }
     }   // 함수 끝
 
@@ -447,8 +438,7 @@ public class Game : MonoBehaviour {
 
     public void HoldTetromino(Transform t)  // 블록 저장
     {
-        // 추가? -> 홀드 증가?(적용하면 ls : 저장, rs : 사용 이런식일듯)
-        currentSwaps++;
+        currentSwaps++; // 교환 횟수
 
         if (currentSwaps > maxSwaps)    // 최대 교체횟수 초과시 실행x
             return;
@@ -464,7 +454,6 @@ public class Game : MonoBehaviour {
             }
             holdedTetromino = (GameObject)Instantiate(t.gameObject);
             holdedTetromino.GetComponent<Tetromino>().enabled = false;
-            // holdedTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
             holdedTetromino.transform.localPosition = HoldTetrominoPosition;
             holdedTetromino.tag = "currentHoldTetromino";
 
@@ -499,8 +488,7 @@ public class Game : MonoBehaviour {
 
     public Vector2 Round(Vector2 pos)   // 위치값 반올림
     {
-        return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
-        // 해당 위치 값 반올림
+        return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y)); // 해당 위치 값 반올림
     }   // 함수 끝
 
     string GetRandomTetromino() // 랜덤 블록 생성

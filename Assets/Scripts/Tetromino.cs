@@ -40,7 +40,6 @@ public class Tetromino : MonoBehaviour {
     {
         Time.timeScale = 1; // 실행 되고 있음을 표시함
         audioSource = GetComponent<AudioSource>();  // 게임 오브젝트에서 소리를 가져옴
-
     }   // 함수 끝
 
     void Update () {    // 프레임 당 실행 함수
@@ -54,12 +53,12 @@ public class Tetromino : MonoBehaviour {
     public void PlayMusicMute()    // 음소거 설정
     {
         audioSource.mute = true;
-    }
+    }   // 함수 끝
 
     public void PlayMusicUnMute()   // 음소거 해제
     {
         audioSource.mute = false;
-    }
+    }   // 함수 끝
 
     void UpdateFallSpeed()  // 떨어지는 속도 함수
     {
@@ -118,14 +117,10 @@ public class Tetromino : MonoBehaviour {
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
                 FindObjectOfType<Game>().GameOver();
 
-            // 나중에 음악 추가시 getkey로 변경!
-
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";  // 태그 추가
             PlayLandAudio();    // 소리 추가
             Instantiate(downEffect, transform.position, Quaternion.identity);  // 배경 eff
-            // 착지 이펙트 추가
-
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
     }
@@ -229,22 +224,16 @@ public class Tetromino : MonoBehaviour {
             // 나중에 음악, 다른 기능 추가시 slam도 업데이트해야함(이 아래로)!
 
              FindObjectOfType<Game>().DeleteRow();   // 행이 다 차있을 경우 행 삭제 실행
-            //Instantiate(deleteExplosion, transform.position, Quaternion.identity);
-            // 삭제시 이펙트 추가
 
             if (FindObjectOfType<Game>().CheckIsAboveGrid(this)) // 블록이 마지막에 도달했는지 검사
-            {
                 FindObjectOfType<Game>().GameOver();
-            }
 
             // 나중에 음악 추가시 getkey로 변경
             enabled = false;    // 움직일 수 없게 하는 것!(바닥에 착지)
             this.tag = "Untagged";   // 태그 추가
             PlayLandAudio();    // 소리 추가
 
-            // Vector3 temp = new Vector3(transform.position.x, transform.position.y + 2, 0);
             Instantiate(downEffect, transform.position, Quaternion.identity);  // 배경 eff
-            // 착지 이펙트 추가
             FindObjectOfType<Game>().SpawnNextTetromino();  // 다음 블록 자동 생성
         }
         fall = Time.time;   // 떨어지는 속도 변경

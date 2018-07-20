@@ -18,10 +18,11 @@ public class MenuSystem : MonoBehaviour {
     void Start()
     {
         Lvtext.text = "0";  // 시작할 때 0으로 표시
+        Game.startingLv = 0;    // 시작할 때 0Lv으로 설정함
 
-       Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
-       Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
-       Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();
+        Highscoretext.text = PlayerPrefs.GetInt("highscore").ToString();
+        Highscoretext2.text = PlayerPrefs.GetInt("highscore2").ToString();
+        Highscoretext3.text = PlayerPrefs.GetInt("highscore3").ToString();
     }   // 함수 끝
 
     public void ResetHs()

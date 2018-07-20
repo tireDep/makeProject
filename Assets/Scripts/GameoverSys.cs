@@ -13,7 +13,7 @@ public class GameoverSys : MonoBehaviour {
     void Start()
     {
         UI_Score.text = playerScore.ToString(); // 점수 출력
-    }
+    }   // 함수 끝
 
     public void GotoMenu() // 게임시작화면 불러오는 함수
     {

@@ -24,12 +24,8 @@ public class GhostTetromino : MonoBehaviour {
     void FollowActiveTetromino()    // 고스트 생성 함수
     {
         Transform currentActiveTetrominoTransform = GameObject.FindGameObjectWithTag("currentActiveTetromino").transform;
-
         transform.position = currentActiveTetrominoTransform.position;
         transform.rotation = currentActiveTetrominoTransform.rotation;
-        // 위 3줄과 다음 내용은 같음
-        // transform.position = GameObject.FindGameObjectWithTag("currentActiveTetromino").transform.position;
-        // transform.rotation = GameObject.FindGameObjectWithTag("currentActiveTetromino").transform.rotation;
     }   // 함수 끝
 
     void MoveDown() // 고스트 하강 함수
@@ -40,9 +36,7 @@ public class GhostTetromino : MonoBehaviour {
         }
 
         if(!CheckIsValidPosition())
-        {
             transform.position += new Vector3(0, 1, 0);
-        }
     }   // 함수 끝
 
     bool CheckIsValidPosition() // 고스트 위치확인 함수
